@@ -44,4 +44,8 @@ public class Member {
         this.address = address;
     }
 
+    public Member(String email){
+        this.email = email;
+    }
+
 }

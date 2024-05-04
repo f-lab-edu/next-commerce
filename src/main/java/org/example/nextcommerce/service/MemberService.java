@@ -1,5 +1,6 @@
 package org.example.nextcommerce.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberForm;
 import org.example.nextcommerce.entity.Member;
@@ -15,12 +16,18 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MemberService {
+    /*
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    */
+
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Map<String, String> validateHandling(Errors errors){
         Map<String, String> validatorResult = new HashMap<>();
@@ -29,6 +36,10 @@ public class MemberService {
             validatorResult.put(validKeyName, error.getDefaultMessage());
         }
         return validatorResult;
+    }
+
+    public boolean checkEmailDuplicate(String email){
+        return memberRepository.existsByEmail(email);
     }
 
     public Member create(MemberForm dto){

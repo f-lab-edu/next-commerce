@@ -1,16 +1,20 @@
 package org.example.nextcommerce.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberForm;
 import org.example.nextcommerce.entity.Member;
 import org.example.nextcommerce.repository.MemberRepository;
 import org.example.nextcommerce.service.MemberService;
+import org.example.nextcommerce.validator.CheckMemberEmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.lang.reflect.Array;
@@ -18,10 +22,16 @@ import java.util.Map;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+    private final CheckMemberEmailValidator checkMemberEmailValidator;
+
+    @InitBinder
+    public void validatorBinder(WebDataBinder binder){
+        binder.addValidators(checkMemberEmailValidator);
+    }
 
     @GetMapping("/signup")
     public String newMemberForm(){
@@ -36,6 +46,8 @@ public class MemberController {
             Map<String, String> validatorResult = memberService.validateHandling(errors);
             for(String key : validatorResult.keySet()){
                 model.addAttribute(key, validatorResult.get(key));
+                log.info(key);
+                log.info(validatorResult.get(key));
             }
 
             if(!validatorResult.containsKey("valid_email")) {
@@ -50,15 +62,10 @@ public class MemberController {
 
         Member created = memberService.create(form);
         if(created == null){
-            return "pages/404";
+            return "redirect:pages/404";
         }
 
-        return "/pages/index";
-    }
-
-    @GetMapping("pages")
-    public String test(){
-        return "pages/404";
+        return "redirect:/pages/index";
     }
 
 }

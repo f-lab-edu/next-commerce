@@ -29,10 +29,11 @@ public class MemberForm {
     }
 
     public Member toEntity(PasswordEncoder passwordEncoder){
-
         return new Member(email, passwordEncoder.encode(password), address);
     }
 
-
+    public Member toEntity(){
+        return new Member(email);
+    }
 
 }
