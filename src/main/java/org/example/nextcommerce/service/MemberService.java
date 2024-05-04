@@ -5,6 +5,7 @@ import org.example.nextcommerce.dto.MemberForm;
 import org.example.nextcommerce.entity.Member;
 import org.example.nextcommerce.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -18,6 +19,9 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Map<String, String> validateHandling(Errors errors){
         Map<String, String> validatorResult = new HashMap<>();
         for(FieldError error : errors.getFieldErrors()){
@@ -28,13 +32,10 @@ public class MemberService {
     }
 
     public Member create(MemberForm dto){
-        Member member = dto.toEntity();
+        Member member = dto.toEntity(passwordEncoder);
         if(member.getId() != null){
             return null;
         }
-
-
-
         return memberRepository.save(member);
     }
 

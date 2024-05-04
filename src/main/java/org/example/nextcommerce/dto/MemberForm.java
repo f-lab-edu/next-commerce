@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.example.nextcommerce.entity.Address;
 import org.example.nextcommerce.entity.Member;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Getter
@@ -28,8 +28,9 @@ public class MemberForm {
         this.address = new Address(zipCode, address, detailAddress, extraAddress);
     }
 
-    public Member toEntity(){
-        return new Member(email, password, address);
+    public Member toEntity(PasswordEncoder passwordEncoder){
+
+        return new Member(email, passwordEncoder.encode(password), address);
     }
 
 

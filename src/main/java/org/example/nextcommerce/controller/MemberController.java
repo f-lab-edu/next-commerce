@@ -36,8 +36,6 @@ public class MemberController {
             Map<String, String> validatorResult = memberService.validateHandling(errors);
             for(String key : validatorResult.keySet()){
                 model.addAttribute(key, validatorResult.get(key));
-                log.info(key);
-                log.info(validatorResult.get(key));
             }
 
             if(!validatorResult.containsKey("valid_email")) {
@@ -49,9 +47,6 @@ public class MemberController {
 
             return "members/renew";
         }
-
-        Member member = form.toEntity();
-        log.info(member.toString());
 
         Member created = memberService.create(form);
         if(created == null){
