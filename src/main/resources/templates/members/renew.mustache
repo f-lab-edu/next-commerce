@@ -5,21 +5,21 @@
 <form class="container" action="/join" method="post">
     <div class="mb-3">
         <label class="form-label">email</label>
+
         <input type="email" class="form-control" name="email" value={{email}} >
-        {{#valid_email}} <div class="alert alert-warning" role="alert"> {{valid_email}}</div> {{/valid_email}}
-        <span> {{^valid_email}}{{/valid_email}} </span>
-
-
+        {{#validEmail}} <div class="alert alert-warning" role="alert"> {{validEmail}}</div> {{/validEmail}}
+        <span> {{^validEmail}}{{/validEmail}} </span>
     </div>
+
+
+
     <div class="mb-3">
         <label class="form-label">password</label>
         <input type="password" class="form-control" name="password" value={{password}}>
-        {{#valid_password}} <div class="alert alert-warning" role="alert"> {{valid_password}}</div> {{/valid_password}}
-        <span> {{^valid_password}}{{/valid_password}} </span>
-
-
-
+        {{#validPassword}} <div class="alert alert-warning" role="alert"> {{validPassword}}</div> {{/validPassword}}
+        <span> {{^validPassword}}{{/validPassword}} </span>
     </div>
+
     <div class="mb-3">
         <label class="form-label">address</label>
         <input type="button" class="btn btn-primary"  onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>

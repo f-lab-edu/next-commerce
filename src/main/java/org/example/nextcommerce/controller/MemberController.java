@@ -3,21 +3,15 @@ package org.example.nextcommerce.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.nextcommerce.dto.MemberForm;
-import org.example.nextcommerce.entity.Member;
-import org.example.nextcommerce.repository.MemberRepository;
+import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.service.MemberService;
-import org.example.nextcommerce.validator.CheckMemberEmailValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.nextcommerce.utils.ReturnType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.lang.reflect.Array;
 import java.util.Map;
 
 @Slf4j
@@ -26,12 +20,6 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final CheckMemberEmailValidator checkMemberEmailValidator;
-
-    @InitBinder
-    public void validatorBinder(WebDataBinder binder){
-        binder.addValidators(checkMemberEmailValidator);
-    }
 
     @GetMapping("/signup")
     public String newMemberForm(){
@@ -39,33 +27,32 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String createMember(@Valid MemberForm form, Errors errors, Model model){
-        log.info(form.toString());
+    public String createMember(@Valid MemberDto dto, Errors errors, Model model){
+        //log.info(dto.toString());
         if(errors.hasErrors()){
-            model.addAttribute("Member", form);
+            model.addAttribute("Member", dto);
             Map<String, String> validatorResult = memberService.validateHandling(errors);
             for(String key : validatorResult.keySet()){
                 model.addAttribute(key, validatorResult.get(key));
-                log.info(key);
-                log.info(validatorResult.get(key));
             }
 
-            if(!validatorResult.containsKey("valid_email")) {
-                model.addAttribute("valid_email", null);
+            if(!validatorResult.containsKey("validEmail")) {
+                model.addAttribute("validEmail", null);
             }
-            if(!validatorResult.containsKey("valid_password")){
-                model.addAttribute("valid_password", null);
+            if(!validatorResult.containsKey("validPassword")){
+                model.addAttribute("validPassword", null);
             }
 
             return "members/renew";
         }
 
-        Member created = memberService.create(form);
-        if(created == null){
-            return "redirect:pages/404";
+        if(memberService.saveMember(dto) == ReturnType.EXIST_EMAIL) {
+            model.addAttribute("Member", dto);
+            model.addAttribute("validEmail", "이미 사용중인 이메일입니다");
+            return "members/renew";
         }
 
-        return "redirect:/pages/index";
+        return "pages/index";
     }
 
 }

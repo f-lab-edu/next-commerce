@@ -3,12 +3,14 @@ package org.example.nextcommerce.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Builder
 @Getter
 @ToString
 @Embeddable
+@NoArgsConstructor
 public class Address {
 
     private String zipCode;
@@ -23,7 +25,4 @@ public class Address {
         this.extraAddress = extraAddress;
     }
 
-    public Address() {
-
-    }
 }

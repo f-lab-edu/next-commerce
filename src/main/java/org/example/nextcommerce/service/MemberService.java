@@ -2,10 +2,9 @@ package org.example.nextcommerce.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.nextcommerce.dto.MemberForm;
-import org.example.nextcommerce.entity.Member;
-import org.example.nextcommerce.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.nextcommerce.dao.MemberDao;
+import org.example.nextcommerce.dto.MemberDto;
+import org.example.nextcommerce.utils.ReturnType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -18,36 +17,29 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    /*
-    @Autowired
-    private MemberRepository memberRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    */
-
-    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberDao memberDao;
 
     public Map<String, String> validateHandling(Errors errors){
         Map<String, String> validatorResult = new HashMap<>();
         for(FieldError error : errors.getFieldErrors()){
-            String validKeyName = String.format("valid_%s", error.getField());
+
+            String validKeyName = String.format("valid%c%s", Character.toUpperCase(error.getField().charAt(0)) ,error.getField().substring(1));
             validatorResult.put(validKeyName, error.getDefaultMessage());
         }
         return validatorResult;
     }
-
-    public boolean checkEmailDuplicate(String email){
-        return memberRepository.existsByEmail(email);
-    }
-
-    public Member create(MemberForm dto){
-        Member member = dto.toEntity(passwordEncoder);
-        if(member.getId() != null){
-            return null;
+    public ReturnType saveMember(MemberDto dto){
+        if(memberDao.FindByEmail(dto.getEmail()) != null){
+            return ReturnType.EXIST_EMAIL;
         }
-        return memberRepository.save(member);
+        dto.passwordCrypt(passwordEncoder);
+
+        if(memberDao.memberSave(dto) == 0){
+            return ReturnType.FAIL;
+        }
+        return ReturnType.SUCCESS;
     }
 
 
