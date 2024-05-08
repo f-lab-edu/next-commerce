@@ -36,7 +36,7 @@ public class MemberService {
         }
         dto.passwordCrypt(passwordEncoder);
 
-        if(memberDao.memberSave(dto) == 0){
+        if(memberDao.save(dto) == 0){
             return ReturnType.FAIL;
         }
         return ReturnType.SUCCESS;

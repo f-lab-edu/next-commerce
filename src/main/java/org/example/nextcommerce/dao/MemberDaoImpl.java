@@ -1,6 +1,7 @@
 package org.example.nextcommerce.dao;
 
 import org.example.nextcommerce.dto.MemberDto;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public class MemberDaoImpl implements MemberDao{
     }
 
     @Override
-    public int memberSave(MemberDto dto) {
+    public int save(MemberDto dto) {
         String sql = "INSERT INTO member (address ,detail_address, extra_address, zip_code,created_time ,email,modified_time ,password)"
                 + " VALUES (?, ?, ?, ?, now(), ?, now() , ?)";
 
@@ -25,6 +26,13 @@ public class MemberDaoImpl implements MemberDao{
     @Override
     public MemberDto FindByEmail(String email) {
         String sql = " SELECT * FROM member WHERE email=?";
-        return jdbcTemplate.queryForObject(sql, new MemberMapper(), email);
+        MemberDto dto;
+        try{
+            dto = jdbcTemplate.queryForObject(sql, new MemberMapper(), email);
+        }catch (EmptyResultDataAccessException e){
+            return null;
+        }
+
+        return dto;
     }
 }

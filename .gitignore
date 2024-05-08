@@ -7,6 +7,7 @@ build/
 
 src/main/resources/static/
 src/main/resources/application-db.properties
+src/test/java/org/example/nextcommerce/jdbc/DBInfo.java
 
 ### STS ###
 .apt_generated
