@@ -1,4 +1,4 @@
-package org.example.nextcommerce.utils;
+package org.example.nextcommerce.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
