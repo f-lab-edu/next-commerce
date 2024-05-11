@@ -3,6 +3,7 @@ package org.example.nextcommerce.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberDto;
+import org.example.nextcommerce.exception.DatabaseException;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,10 @@ public class MemberService {
 
     public boolean create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
-        return (memberJdbcRepository.save(dto) == 0) ? false : true;
+        if(memberJdbcRepository.save(dto) == 0){
+            throw new DatabaseException();
+        }
+        return true;
     }
 
     public boolean isDuplicatedEmail(String email){

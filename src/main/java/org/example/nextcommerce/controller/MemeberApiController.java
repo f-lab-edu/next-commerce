@@ -26,7 +26,7 @@ public class MemeberApiController {
         if(memberService.isDuplicatedEmail(dto.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        return (memberService.create(dto)) ? ResponseEntity.status(HttpStatus.OK).body(null) :
+        return (memberService.create(dto)) ? ResponseEntity.status(HttpStatus.OK).build() :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
