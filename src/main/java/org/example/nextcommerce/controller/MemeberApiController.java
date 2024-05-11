@@ -23,7 +23,7 @@ public class MemeberApiController {
     @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody MemberDto dto){
 
-        if(!memberService.isDuplicatedEmail(dto.getEmail())){
+        if(memberService.isDuplicatedEmail(dto.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return (memberService.create(dto)) ? ResponseEntity.status(HttpStatus.OK).body(null) :

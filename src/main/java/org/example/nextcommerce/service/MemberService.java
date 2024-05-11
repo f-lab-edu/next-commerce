@@ -22,7 +22,7 @@ public class MemberService {
     }
 
     public boolean isDuplicatedEmail(String email){
-        return (memberJdbcRepository.findByEmail(email) != null) ? false : true;
+        return (memberJdbcRepository.findByEmail(email) == null) ? false : true;
     }
 
 
