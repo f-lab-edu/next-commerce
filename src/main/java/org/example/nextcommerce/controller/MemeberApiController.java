@@ -1,5 +1,6 @@
 package org.example.nextcommerce.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberDto;
@@ -14,20 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(MemeberApiController.MEMBER_API_URI)
+@RequestMapping("/api/members")
 public class MemeberApiController {
-    public static final String MEMBER_API_URI = "/api/members";
 
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody MemberDto dto){
-
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid MemberDto dto){
         if(memberService.isDuplicatedEmail(dto.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        return (memberService.create(dto)) ? ResponseEntity.status(HttpStatus.OK).build() :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        memberService.create(dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

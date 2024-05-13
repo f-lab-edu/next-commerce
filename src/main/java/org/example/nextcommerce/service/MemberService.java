@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.exception.DatabaseException;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.utils.errormessage.ErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,11 @@ public class MemberService {
     private final MemberJdbcRepository memberJdbcRepository;
 
 
-    public boolean create(MemberDto dto){
+    public void create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
         if(memberJdbcRepository.save(dto) == 0){
-            throw new DatabaseException();
+            throw new DatabaseException(ErrorCode.DBInsertFail.getDescription());
         }
-        return true;
     }
 
     public boolean isDuplicatedEmail(String email){
