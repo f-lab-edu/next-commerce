@@ -1,6 +1,7 @@
 package org.example.nextcommerce.utils.errormessage;
 
 public enum ErrorCode {
+    UnknownError(0, "Unknown Error"),
     DB(700,"Database Error"),
     DBConnectionTimeOut(701, "Database connection time out"),
     DBInsertFail(702, "Database insert failed"),

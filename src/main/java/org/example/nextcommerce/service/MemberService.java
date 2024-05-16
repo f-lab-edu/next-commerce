@@ -21,7 +21,7 @@ public class MemberService {
     public void create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
         if(memberJdbcRepository.save(dto) == 0){
-            throw new DatabaseException(ErrorCode.DBInsertFail.getDescription());
+            throw new DatabaseException(ErrorCode.DBInsertFail);
         }
     }
 
