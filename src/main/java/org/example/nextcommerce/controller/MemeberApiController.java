@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.service.SessionLoginService;
 import org.example.nextcommerce.service.MemberService;
+import org.example.nextcommerce.utils.annotation.LoginRequired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ public class MemeberApiController {
     }
 
     @GetMapping("/session")
+    @LoginRequired
     public Long sessionTest(){
         Long id = loginService.getSessionMemberId();
         log.info(Long.toString(id));
