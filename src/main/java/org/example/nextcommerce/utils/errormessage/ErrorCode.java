@@ -6,6 +6,11 @@ public enum ErrorCode {
 
     Member(100, "Member Error"),
     MemberNotFound(101, "Member not found"),
+
+    Session(200, "Session Error"),
+    SessionSaveFail(201, "Session save fail"),
+    SessionIsNull(202, "Session is null"),
+
     DB(700,"Database Error"),
     DBConnectionTimeOut(701, "Database connection time out"),
     DBInsertFail(702, "Database insert failed"),

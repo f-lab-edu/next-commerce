@@ -3,6 +3,7 @@ package org.example.nextcommerce.controller;
 import org.example.nextcommerce.controller.response.ExceptionResponse;
 import org.example.nextcommerce.exception.DatabaseException;
 import org.example.nextcommerce.exception.MemberNotFoundException;
+import org.example.nextcommerce.exception.UnauthorizedException;
 import org.example.nextcommerce.utils.errormessage.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,11 @@ public class ControllerExceptionAdvice {
                         )
                 );
         return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(ErrorCode.InvalidRequestContent.getCode(), ErrorCode.InvalidRequestContent.getDescription(), errors));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> unauthorizedException(UnauthorizedException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(e.getErrorCode().getCode(), e.getErrorCode().getDescription()));
     }
 
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.exception.DatabaseException;
+import org.example.nextcommerce.exception.MemberNotFoundException;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
 import org.example.nextcommerce.utils.errormessage.ErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberJdbcRepository memberJdbcRepository;
 
-
     public void create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
         if(memberJdbcRepository.save(dto) == 0){
@@ -27,6 +27,17 @@ public class MemberService {
 
     public boolean isDuplicatedEmail(String email){
         return (memberJdbcRepository.findByEmail(email) == null) ? false : true;
+    }
+
+    public MemberDto checkValidMember(MemberDto inputMembetDto){
+        MemberDto dbDto = memberJdbcRepository.findByEmail(inputMembetDto.getEmail());
+        if(dbDto == null){
+            throw new MemberNotFoundException(ErrorCode.MemberNotFound);
+        }
+        if(passwordEncoder.matches(inputMembetDto.getPassword(), dbDto.getPassword())){
+            return dbDto;
+        }
+        return null;
     }
 
 
