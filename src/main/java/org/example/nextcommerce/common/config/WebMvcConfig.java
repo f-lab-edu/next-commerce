@@ -1,7 +1,7 @@
-package org.example.nextcommerce.config;
+package org.example.nextcommerce.common.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.nextcommerce.interceptor.AuthInterceptor;
+import org.example.nextcommerce.common.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

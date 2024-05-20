@@ -1,7 +1,6 @@
-package org.example.nextcommerce.exception;
+package org.example.nextcommerce.common.exception;
 
-import lombok.ToString;
-import org.example.nextcommerce.utils.errormessage.ErrorCode;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 
 public class DatabaseException extends ErrorCodeExcpetion{
     public DatabaseException(){}

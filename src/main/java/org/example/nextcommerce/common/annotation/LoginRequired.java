@@ -1,4 +1,4 @@
-package org.example.nextcommerce.utils.annotation;
+package org.example.nextcommerce.common.annotation;
 
 import java.lang.annotation.*;
 

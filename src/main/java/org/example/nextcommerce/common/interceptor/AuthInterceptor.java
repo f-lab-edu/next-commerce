@@ -1,12 +1,12 @@
-package org.example.nextcommerce.interceptor;
+package org.example.nextcommerce.common.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.nextcommerce.exception.UnauthorizedException;
+import org.example.nextcommerce.common.exception.UnauthorizedException;
 import org.example.nextcommerce.service.SessionLoginService;
-import org.example.nextcommerce.utils.annotation.LoginRequired;
-import org.example.nextcommerce.utils.errormessage.ErrorCode;
+import org.example.nextcommerce.common.annotation.LoginRequired;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

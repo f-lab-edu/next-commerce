@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.dto.LoginDto;
 import org.example.nextcommerce.dto.MemberDto;
-import org.example.nextcommerce.exception.UnauthorizedException;
-import org.example.nextcommerce.utils.errormessage.ErrorCode;
+import org.example.nextcommerce.common.exception.UnauthorizedException;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.springframework.stereotype.Service;
 
 @Slf4j

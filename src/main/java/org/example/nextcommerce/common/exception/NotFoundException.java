@@ -1,7 +1,6 @@
-package org.example.nextcommerce.exception;
+package org.example.nextcommerce.common.exception;
 
-import org.example.nextcommerce.utils.errormessage.ErrorCode;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 
 public class NotFoundException extends ErrorCodeExcpetion {
     public NotFoundException(){    }
