@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.nextcommerce.common.exception.UnauthorizedException;
+import org.example.nextcommerce.common.utils.SessionUtils;
 import org.example.nextcommerce.service.SessionLoginService;
 import org.example.nextcommerce.common.annotation.LoginRequired;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
@@ -17,14 +18,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
 
-    private final SessionLoginService loginService;
-
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         if(handler instanceof HandlerMethod && ((HandlerMethod) handler).hasMethodAnnotation(LoginRequired.class)){
-            Long memberId = loginService.getSessionMemberId();
+            Long memberId = SessionUtils.getLoginSessionMemberId();
             if (memberId == null){
                 throw new UnauthorizedException(ErrorCode.SessionIsNull);
             }

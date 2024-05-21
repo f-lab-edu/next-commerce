@@ -20,8 +20,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberJdbcRepository memberJdbcRepository;
 
-    private ValidCheck validCheck;
-
     public void create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
         if(memberJdbcRepository.save(dto) == 0){

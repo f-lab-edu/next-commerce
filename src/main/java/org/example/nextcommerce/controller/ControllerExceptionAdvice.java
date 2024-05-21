@@ -16,7 +16,7 @@ public class ControllerExceptionAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> defaultException(Exception e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ErrorCode.UnknownError.getCode(), ErrorCode.UnknownError.getDescription()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ErrorCode.UnknownError.getCode(), e.getMessage()));
     }
 
     @ExceptionHandler(DatabaseException.class)

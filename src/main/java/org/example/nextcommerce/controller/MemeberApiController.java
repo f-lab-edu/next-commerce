@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemeberApiController {
 
     private final MemberService memberService;
-    private final SessionLoginService loginService;
 
     @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody MemberDto dto){
@@ -29,22 +28,5 @@ public class MemeberApiController {
         memberService.create(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<HttpStatus> login(@RequestBody MemberDto dto){
-        MemberDto dbDto = memberService.checkValidMember(dto);
-        loginService.saveLoginMember(dbDto);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @GetMapping("/session")
-    @LoginRequired
-    public Long sessionTest(){
-        Long id = loginService.getSessionMemberId();
-        log.info(Long.toString(id));
-        return id;
-    }
-
-
 
 }
