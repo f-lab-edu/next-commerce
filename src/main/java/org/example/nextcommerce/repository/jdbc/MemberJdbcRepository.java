@@ -58,7 +58,7 @@ public class MemberJdbcRepository {
 
     public int deleteByMemberId(Long memberId){
         String sql = "DELETE FROM members WHERE member_id=?";
-        return jdbcTemplate.update(sql, Long.valueOf(memberId));
+        return jdbcTemplate.update(sql, memberId);
 
     }
 
