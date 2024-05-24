@@ -1,11 +1,12 @@
 package org.example.nextcommerce.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.nextcommerce.dto.MemberDto;
-import org.example.nextcommerce.service.SessionLoginService;
-import org.example.nextcommerce.service.MemberService;
+import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
+import org.example.nextcommerce.dto.MemberDto;
+import org.example.nextcommerce.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +29,21 @@ public class MemeberApiController {
         memberService.create(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @PostMapping("/signin")
+    public ResponseEntity<HttpStatus> login(@RequestBody MemberDto dto, HttpSession httpSession){
+        MemberDto dbDto = memberService.checkValidMember(dto);
+        httpSession.setAttribute("MemberId", dbDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/session")
+    @LoginRequired
+    public Long sessionTest(@SessionAttribute(name = "MemberId") Long memberId, @LoginMember MemberDto memberDto){
+        log.info(memberDto.toString());
+        return memberId;
+    }
+
+
 
 }

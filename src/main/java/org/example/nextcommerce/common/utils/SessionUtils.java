@@ -12,7 +12,6 @@ public class SessionUtils {
 
     public static HttpSession getSession(){
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-
         return servletRequestAttributes.getRequest().getSession();
     }
 
@@ -22,7 +21,10 @@ public class SessionUtils {
 
     public static Long getLoginSessionMemberId(){
         return (Long) SessionUtils.getSession().getAttribute("MemberId");
+    }
 
+    public static String getSessionId(){
+        return SessionUtils.getSession().getId();
     }
 
 
