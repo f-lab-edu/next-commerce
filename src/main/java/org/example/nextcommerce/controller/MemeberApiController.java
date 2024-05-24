@@ -37,12 +37,21 @@ public class MemeberApiController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/session")
     @LoginRequired
+    @GetMapping("/session")
     public Long sessionTest(@SessionAttribute(name = "MemberId") Long memberId, @LoginMember MemberDto memberDto){
         log.info(memberDto.toString());
         return memberId;
     }
+
+    @LoginRequired
+    @GetMapping("/signout")
+    public ResponseEntity<HttpStatus> logout(HttpSession httpSession){
+        httpSession.removeAttribute("MemberId");
+        httpSession.removeAttribute("MemberDto");
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
 
 
