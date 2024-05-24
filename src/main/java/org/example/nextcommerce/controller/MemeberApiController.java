@@ -2,6 +2,7 @@ package org.example.nextcommerce.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
@@ -47,6 +48,16 @@ public class MemeberApiController {
     @LoginRequired
     @GetMapping("/signout")
     public ResponseEntity<HttpStatus> logout(HttpSession httpSession){
+        httpSession.removeAttribute("MemberId");
+        httpSession.removeAttribute("MemberDto");
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @LoginRequired
+    @DeleteMapping("/account")
+    public ResponseEntity<HttpStatus> deleteMember(HttpSession httpSession){
+        Long memberId = (Long) httpSession.getAttribute("MemberId");
+        memberService.deleteMember(memberId);
         httpSession.removeAttribute("MemberId");
         httpSession.removeAttribute("MemberDto");
         return ResponseEntity.status(HttpStatus.OK).build();

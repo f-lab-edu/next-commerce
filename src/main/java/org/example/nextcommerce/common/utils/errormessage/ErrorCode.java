@@ -19,7 +19,9 @@ public enum ErrorCode {
     DBConnectionTimeOut(701, "Database connection time out"),
     DBInsertFail(702, "Database insert failed"),
     DBTransactionFail(703, "Database transaction failed"),
-    DBUpdateFail(704, "Database update failed");
+    DBUpdateFail(704, "Database update failed"),
+    DBDeleteFail(705, "Database delete failed");
+
 
 
     private int code;

@@ -6,6 +6,7 @@ import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.common.exception.BadRequestException;
 import org.example.nextcommerce.common.exception.DatabaseException;
 import org.example.nextcommerce.common.exception.MemberNotFoundException;
+import org.example.nextcommerce.entity.Member;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.common.utils.validation.ValidCheck;
@@ -50,6 +51,12 @@ public class MemberService {
             throw new BadRequestException(ErrorCode.MemberPwValidationFailed);
         }
         return true;
+   }
+
+   public void deleteMember(Long memberId){
+        if(memberJdbcRepository.deleteByMemberId(memberId) != 1 ){
+            throw new DatabaseException(ErrorCode.DBDeleteFail);
+        }
    }
 
 }
