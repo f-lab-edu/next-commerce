@@ -13,6 +13,7 @@ public enum ErrorCode {
     Session(200, "Session Error"),
     SessionSaveFail(201, "Session save fail"),
     SessionIsNull(202, "Session is null"),
+    SessionMemberIsNull(203, "Session member is null"),
 
     DB(700,"Database Error"),
     DBConnectionTimeOut(701, "Database connection time out"),

@@ -37,7 +37,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         MemberDto memberDto = (MemberDto) request.getAttribute("MemberDto");
         LoginMember loginMember = parameter.getParameterAnnotation(LoginMember.class);
         if(memberDto == null || loginMember == null){
-            throw new MemberNotFoundException(ErrorCode.MemberNotFound);
+            throw new MemberNotFoundException(ErrorCode.SessionMemberIsNull);
         }
 
         return memberDto;
