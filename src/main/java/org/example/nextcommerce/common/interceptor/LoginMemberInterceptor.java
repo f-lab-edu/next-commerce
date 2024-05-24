@@ -35,7 +35,7 @@ public class LoginMemberInterceptor implements HandlerInterceptor {
             Parameter[] parameters = handlerMethod.getMethod().getParameters();
             for(Parameter parameter : parameters){
                 if(parameter.isAnnotationPresent(LoginMember.class)){
-                    HttpSession httpSession = request.getSession();
+                    HttpSession httpSession = request.getSession(false);
                     Long memberId = (Long) httpSession.getAttribute("MemberId");
                     if (memberId == null){
                         throw new UnauthorizedException(ErrorCode.SessionIsNull);
