@@ -1,4 +1,4 @@
-package org.example.nextcommerce.config;
+package org.example.nextcommerce.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

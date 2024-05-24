@@ -44,5 +44,16 @@ public class MemberJdbcRepository {
         return jdbcTemplate.update(sql, dto.getEmail(), dto.getPassword());
     }
 
+    public MemberDto findByMemberId(Long memberId) {
+        String sql = " SELECT * FROM members WHERE member_id=?";
+        MemberDto dto;
+        try{
+            dto = jdbcTemplate.queryForObject(sql, memberDtoRowMapper() , memberId);
+        }catch (EmptyResultDataAccessException e){
+            return null;
+        }
+
+        return dto;
+    }
 
 }
