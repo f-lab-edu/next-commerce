@@ -2,6 +2,7 @@ package org.example.nextcommerce.common.utils.errormessage;
 
 public enum ErrorCode {
     UnknownError(0, "Unknown Error"),
+    IOException(1, "IOException"),
     InvalidRequestContent(10, "Invalid request content"),
 
     Member(100, "Member Error"),
