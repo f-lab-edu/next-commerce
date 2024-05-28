@@ -8,6 +8,9 @@ build/
 src/main/resources/static/
 src/main/resources/application-db.properties
 src/test/java/org/example/nextcommerce/jdbc/DBInfo.java
+src/main/resources/images/
+src/main/resources/*.jpg
+
 
 ### STS ###
 .apt_generated
