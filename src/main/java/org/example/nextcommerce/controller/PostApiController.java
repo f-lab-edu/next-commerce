@@ -16,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -31,13 +32,14 @@ public class PostApiController {
     public ResponseEntity<HttpStatus> createPost(@RequestPart List<MultipartFile> files, @RequestPart(value = "postRequestDto")PostRequestDto postRequestDto, @LoginMember MemberDto memberDto){
 
         if(files.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         if(postRequestDto == null || memberDto == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+        postService.save(files, postRequestDto, memberDto);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -51,7 +53,8 @@ public class PostApiController {
         if(files.isEmpty()){
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        log.info(files.get(0).toString());
+
+        postService.fileHandlerTest(files);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
