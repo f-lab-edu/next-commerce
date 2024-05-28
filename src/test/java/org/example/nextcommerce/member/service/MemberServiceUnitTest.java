@@ -1,7 +1,8 @@
-package org.example.nextcommerce.service;
+package org.example.nextcommerce.member.service;
 
 import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
