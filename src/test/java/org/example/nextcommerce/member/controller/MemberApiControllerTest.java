@@ -1,4 +1,4 @@
-package org.example.nextcommerce.controller;
+package org.example.nextcommerce.member.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +52,6 @@ public class MemberApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
 
