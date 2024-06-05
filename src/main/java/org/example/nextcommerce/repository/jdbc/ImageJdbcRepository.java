@@ -1,6 +1,8 @@
 package org.example.nextcommerce.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.example.nextcommerce.common.exception.DatabaseException;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.dto.ImageDto;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,7 +23,7 @@ public class ImageJdbcRepository {
         return ((rs, rowNum) -> {
            ImageDto dto = ImageDto.builder()
                    .imageId(rs.getLong("image_id"))
-                   .productId(rs.getLong("product_id"))
+                   .postId(rs.getLong("post_id"))
                    .filePath(rs.getString("path"))
                    .originalName(rs.getString("original_name"))
                    .fileSize(rs.getLong("size"))
@@ -31,7 +33,7 @@ public class ImageJdbcRepository {
     }
 
     public void saveAll(List<ImageDto> imageDtoList, Long postId){
-        String sql = "INSERT INTO images (product_id, path, original_name, size) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO images (post_id, path, original_name, size) VALUES (?,?,?,?)";
 
         BatchPreparedStatementSetter batchPreparedStatementSetter = new BatchPreparedStatementSetter() {
             @Override
@@ -49,6 +51,19 @@ public class ImageJdbcRepository {
             }
         };
         jdbcTemplate.batchUpdate(sql, batchPreparedStatementSetter);
+    }
+
+
+    public List<ImageDto> findAllByPostId(Long postId){
+        String sql = "SELECT * FROM images WHERE post_id=?";
+        return jdbcTemplate.query(sql, imageDtoRowMapper(), postId);
+    }
+
+    public void deleteByPostId(Long postId){
+        String sql = "DELETE FROM images WHERE post_id=?";
+        if(jdbcTemplate.update(sql, postId) < 1){
+            throw new DatabaseException(ErrorCode.PostsDeleteFail);
+        }
     }
 
 }
