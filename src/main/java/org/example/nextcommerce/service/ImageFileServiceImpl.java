@@ -79,4 +79,18 @@ public class ImageFileServiceImpl implements ImageFileService {
         return imageDtoList;
     }
 
+    @Override
+    public void deleteImageFiles(List<ImageDto> imageDtoList) {
+        for(ImageDto imageDto : imageDtoList){
+            Path filePath = Paths.get(imageDto.getFilePath());
+            log.info(filePath.toString());
+            try{
+                Files.deleteIfExists(filePath);
+            }catch (IOException e){
+                throw new FileHandleException(e.getMessage());
+            }
+
+        }
+
+    }
 }

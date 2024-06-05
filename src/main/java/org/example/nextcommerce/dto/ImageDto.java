@@ -10,7 +10,7 @@ import lombok.*;
 public class ImageDto {
 
     private Long imageId;
-    private Long productId;
+    private Long postId;
     private String originalName;
     private String filePath;
     private Long fileSize;
