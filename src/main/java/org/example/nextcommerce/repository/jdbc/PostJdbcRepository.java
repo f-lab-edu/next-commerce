@@ -1,7 +1,10 @@
 package org.example.nextcommerce.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.example.nextcommerce.common.exception.DatabaseException;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.dto.PostDto;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -51,6 +54,25 @@ public class PostJdbcRepository {
         dto.updatePostId(keyHolder.getKey().longValue());
         return dto.getPostId();
     }
+
+    public PostDto findByPostId(Long postId){
+        String sql = "SELECT * FROM posts WHERE post_id=?";
+        PostDto dto;
+        try {
+            dto = jdbcTemplate.queryForObject(sql, postDtoRowMapper(), postId);
+        }catch (EmptyResultDataAccessException e){
+            throw new DatabaseException(ErrorCode.PostsNotFound);
+        }
+        return dto;
+    }
+
+    public void deleteByPostId(Long postId){
+        String sql = "DELETE FROM posts WHERE post_id=?";
+        if(jdbcTemplate.update(sql, postId) != 1){
+            throw new DatabaseException(ErrorCode.PostsDeleteFail);
+        }
+    }
+
 
 
 }
