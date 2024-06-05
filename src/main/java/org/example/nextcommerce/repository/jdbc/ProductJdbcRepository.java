@@ -1,6 +1,8 @@
 package org.example.nextcommerce.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.example.nextcommerce.common.exception.DatabaseException;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.dto.ProductDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -51,6 +53,13 @@ public class ProductJdbcRepository {
         }, keyHolder);
         dto.updateId(keyHolder.getKey().longValue());
         return dto.getProductId();
+    }
+
+    public void deleteByProductId(Long productId){
+        String sql = "DELETE FROM products WHERE product_id=?";
+        if(jdbcTemplate.update(sql, productId) != 1){
+            throw new DatabaseException(ErrorCode.ProductsDeleteFail);
+        }
     }
 
 
