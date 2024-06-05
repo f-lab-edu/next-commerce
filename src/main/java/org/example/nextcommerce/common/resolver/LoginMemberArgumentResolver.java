@@ -6,7 +6,7 @@ import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.exception.MemberNotFoundException;
 import org.example.nextcommerce.common.interceptor.AuthInterceptor;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
-import org.example.nextcommerce.dto.MemberDto;
+import org.example.nextcommerce.member.dto.MemberDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
