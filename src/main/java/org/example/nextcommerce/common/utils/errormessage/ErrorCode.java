@@ -10,6 +10,7 @@ public enum ErrorCode {
     MemberPasswordMismatch(102, "Member password mismatch"),
     MemberEmailValidationFailed(103, "Member email validation failed"),
     MemberPwValidationFailed(104, "Member password validation failed"),
+    MemberDuplicatedEmail(105, "Member duplicated email"),
 
     Session(200, "Session Error"),
     SessionSaveFail(201, "Session save fail"),
