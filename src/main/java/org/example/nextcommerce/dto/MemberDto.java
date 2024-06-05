@@ -1,10 +1,11 @@
 package org.example.nextcommerce.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.example.nextcommerce.entity.Member;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.regex.Pattern;
 
 @Getter
 @ToString
@@ -28,5 +29,14 @@ public class MemberDto {
     public boolean isValidMemberId(Long memberId){
         return this.id.equals(memberId);
     }
+
+    public boolean isEmailValidation(){
+        return Pattern.matches("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]{2,12})@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){2,12}[.][a-zA-Z]{2,3}$", this.email);
+    }
+
+    public boolean isPasswordValidation(){
+        return Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", this.password);
+    }
+
 
 }
