@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
 import org.example.nextcommerce.common.exception.FileHandleException;
+import org.example.nextcommerce.common.exception.UnauthorizedException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.dto.*;
 import org.example.nextcommerce.service.ImageFileService;
@@ -31,7 +32,6 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
-    private final ImageFileService imageFileService;
 
     @LoginRequired
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -61,10 +61,21 @@ public class PostApiController {
             }
             imageRequestDtoList.add(imageRequestDto);
         }
+        //List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList);
+        postService.save(imageRequestDtoList, postRequestDto, memberDto);
 
-        List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
-        postService.save(imageDtoList, postRequestDto, memberDto);
+    @LoginRequired
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId, @LoginMember MemberDto memberDto){
+
+        PostDto postDto = postService.findPost(postId);
+        if(!postDto.getMemberId().equals(memberDto.getId())){
+            throw new UnauthorizedException(ErrorCode.PostsUnAuthorized);
+        }
+        postService.delete(postId, postDto.getProductId());
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
