@@ -16,6 +16,19 @@ public enum ErrorCode {
     SessionIsNull(202, "Session is null"),
     SessionMemberIsNull(203, "Session member is null"),
 
+    Posts(300, "Posts Error"),
+    PostsNotFound(301, "Posts not found"),
+    PostsDeleteFail(302, "Posts DB delete failed"),
+    PostsUnAuthorized(303, "Post's author is not valid"),
+
+    Images(400, "Images Error"),
+    ImagesNotFound(401,"Images not found"),
+    ImagesDeleteFail(402,"Images DB delete failed"),
+
+    Products(500, "Products Error"),
+    ProductsNotFound(501, "Products not found"),
+    ProductsDeleteFail(502, "Products DB delete failed"),
+
     DB(700,"Database Error"),
     DBConnectionTimeOut(701, "Database connection time out"),
     DBInsertFail(702, "Database insert failed"),
