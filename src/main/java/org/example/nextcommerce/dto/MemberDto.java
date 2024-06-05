@@ -25,4 +25,8 @@ public class MemberDto {
         this.id = memberId;
     }
 
+    public boolean isValidMemberId(Long memberId){
+        return this.id.equals(memberId);
+    }
+
 }
