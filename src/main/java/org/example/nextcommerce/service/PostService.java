@@ -25,9 +25,10 @@ public class PostService {
     private final PostJdbcRepository postJdbcRepository;
     private final ImageJdbcRepository imageJdbcRepository;
     private final ProductJdbcRepository productJdbcRepository;
+    private final ImageFileService imageFileService;
 
     @Transactional
-    public void save(List<ImageDto> imageDtoList, PostRequestDto postRequestDto, MemberDto memberDto){
+    public void save(List<ImageRequestDto> imageRequestDtoList, PostRequestDto postRequestDto, MemberDto memberDto){
 
         ProductDto productDto = ProductDto.builder()
                                 .code("code")
@@ -54,8 +55,22 @@ public class PostService {
             throw new DatabaseException(ErrorCode.DBInsertFail);
         }
 
+        List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList);
         imageJdbcRepository.saveAll(imageDtoList, postId);
 
+    }
+
+    public PostDto findPost(Long postId){
+        return postJdbcRepository.findByPostId(postId);
+    }
+
+    @Transactional
+    public void delete(Long postId, Long productId){
+        List<ImageDto> imageDtoList = imageJdbcRepository.findAllByPostId(postId);
+        imageFileService.deleteImageFiles(imageDtoList);
+        imageJdbcRepository.deleteByPostId(postId);
+        postJdbcRepository.deleteByPostId(postId);
+        productJdbcRepository.deleteByProductId(productId);
     }
 
 }

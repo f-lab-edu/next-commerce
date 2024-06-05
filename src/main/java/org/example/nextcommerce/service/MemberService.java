@@ -9,7 +9,6 @@ import org.example.nextcommerce.common.exception.MemberNotFoundException;
 import org.example.nextcommerce.entity.Member;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
-import org.example.nextcommerce.common.utils.validation.ValidCheck;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +22,13 @@ public class MemberService {
 
     public void create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
-        if(memberJdbcRepository.save(dto) == 0){
-            throw new DatabaseException(ErrorCode.DBInsertFail);
-        }
+        memberJdbcRepository.save(dto);
     }
 
-    public boolean isDuplicatedEmail(String email){
-        return (memberJdbcRepository.findByEmail(email) == null) ? false : true;
+    public void checkDuplicatedEmail(String email){
+        if(memberJdbcRepository.findByEmail(email) != null){
+            throw new BadRequestException(ErrorCode.MemberDuplicatedEmail);
+        }
     }
 
     public MemberDto checkValidMember(MemberDto inputMembetDto){
@@ -44,19 +43,17 @@ public class MemberService {
     }
 
    public boolean isValidMemberDto(MemberDto memberDto){
-        if(!ValidCheck.isEmailValidation(memberDto.getEmail())){
+        if(!memberDto.isEmailValidation()){
             throw new BadRequestException(ErrorCode.MemberEmailValidationFailed);
         }
-        if(!ValidCheck.isPasswordValidation(memberDto.getPassword())){
+        if(!memberDto.isPasswordValidation()){
             throw new BadRequestException(ErrorCode.MemberPwValidationFailed);
         }
         return true;
    }
 
    public void deleteMember(Long memberId){
-        if(memberJdbcRepository.deleteByMemberId(memberId) != 1 ){
-            throw new DatabaseException(ErrorCode.DBDeleteFail);
-        }
+        memberJdbcRepository.deleteByMemberId(memberId);
    }
 
 }

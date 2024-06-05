@@ -1,6 +1,9 @@
 package org.example.nextcommerce.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.example.nextcommerce.common.exception.DatabaseException;
+import org.example.nextcommerce.common.exception.MemberNotFoundException;
+import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.dto.MemberDto;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,10 +41,12 @@ public class MemberJdbcRepository {
         return dto;
     }
 
-    public int save(MemberDto dto){
+    public void save(MemberDto dto){
         String sql = "INSERT INTO members (email, password, created_time, modified_time) "
                 + "VALUES (?,?,now(), now())";
-        return jdbcTemplate.update(sql, dto.getEmail(), dto.getPassword());
+        if(jdbcTemplate.update(sql, dto.getEmail(), dto.getPassword()) == 0){
+            throw new DatabaseException(ErrorCode.DBInsertFail);
+        }
     }
 
     public MemberDto findByMemberId(Long memberId) {
@@ -50,15 +55,17 @@ public class MemberJdbcRepository {
         try{
             dto = jdbcTemplate.queryForObject(sql, memberDtoRowMapper() , memberId);
         }catch (EmptyResultDataAccessException e){
-            return null;
+            throw new MemberNotFoundException(ErrorCode.MemberNotFound);
         }
 
         return dto;
     }
 
-    public int deleteByMemberId(Long memberId){
+    public void deleteByMemberId(Long memberId){
         String sql = "DELETE FROM members WHERE member_id=?";
-        return jdbcTemplate.update(sql, memberId);
+        if(jdbcTemplate.update(sql, memberId) != 1){
+            throw new DatabaseException(ErrorCode.DBDeleteFail);
+        }
 
     }
 

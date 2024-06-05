@@ -2,7 +2,6 @@ package org.example.nextcommerce.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
-public class MemeberApiController {
+public class MemberApiController {
 
     private final MemberService memberService;
 
@@ -24,9 +23,8 @@ public class MemeberApiController {
     public ResponseEntity<HttpStatus> create(@RequestBody MemberDto dto){
         memberService.isValidMemberDto(dto);
 
-        if(memberService.isDuplicatedEmail(dto.getEmail())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        memberService.checkDuplicatedEmail(dto.getEmail());
+
         memberService.create(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
