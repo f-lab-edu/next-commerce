@@ -1,5 +1,6 @@
 package org.example.nextcommerce.member.service;
 
+import org.example.nextcommerce.common.exception.BadRequestException;
 import org.example.nextcommerce.dto.MemberDto;
 import org.example.nextcommerce.repository.jdbc.MemberJdbcRepository;
 import org.example.nextcommerce.service.MemberService;
@@ -13,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceUnitTest {
@@ -36,21 +37,20 @@ public class MemberServiceUnitTest {
     }
 
     @Test
-    @DisplayName("중복된 이메일이 존재하지 않는 경우 False를 반환")
-    void isNotDuplicatedEmailExist(){
-        //given
-        when(memberJdbcRepository.findByEmail(any())).thenReturn(null);
-        //when-then
-        assertFalse(memberService.isDuplicatedEmail(memberDto.getEmail()));
-    }
-
-    @Test
-    @DisplayName("중복된 이메일이 존재하는 경우 True를 반환")
-    void isDuplicatedEmailExist(){
+    @DisplayName("중복된 이메일이 존재하는 경우 BadRequestException")
+    void isDuplicatedEmailExistFail(){
         //given
         when(memberJdbcRepository.findByEmail(any())).thenReturn(memberDto);
         //when-then
-        assertTrue(memberService.isDuplicatedEmail(memberDto.getEmail()));
+        assertThrows(BadRequestException.class,()->{
+            memberService.checkDuplicatedEmail(memberDto.getEmail());
+        });
+    }
+
+    @Test
+    @DisplayName("현재 Member 객체에 대한 Email, Password 유호성 검사 성공")
+    void isValidMemberDtoTest(){
+        assertTrue(memberService.isValidMemberDto(memberDto));
     }
 
 }
