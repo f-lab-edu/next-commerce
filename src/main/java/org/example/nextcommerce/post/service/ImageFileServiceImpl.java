@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,13 +30,13 @@ public class ImageFileServiceImpl implements ImageFileService {
 
 
     @Override
-    public List<ImageDto> parseImageFiles(List<ImageRequestDto> imageRequestDtoList){
+    public List<ImageDto> parseImageFiles(List<ImageRequestDto> imageRequestDtoList, Long postId){
 
         List<ImageDto> imageDtoList = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDate = now.format(dateTimeFormatter);
-        Path directoryPath = Paths.get(basePath, currentDate);
+        Path directoryPath = Paths.get(basePath, currentDate, postId.toString());
 
         if(!isDirectory(directoryPath, LinkOption.NOFOLLOW_LINKS)){
             try{
@@ -93,4 +95,20 @@ public class ImageFileServiceImpl implements ImageFileService {
         }
 
     }
+
+    @Override
+    public void deleteDirectoryAll(String imagePath) {
+        Path filePath = Paths.get(imagePath).getParent();
+        log.info(filePath.toString());
+        try{
+            Files.walk(filePath)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        }catch (IOException e){
+            throw new FileHandleException(e.getMessage());
+        }
+
+    }
+
 }
