@@ -1,8 +1,10 @@
 package org.example.nextcommerce.post.service;
 
+import jakarta.persistence.PostUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.exception.DatabaseException;
+import org.example.nextcommerce.common.exception.UnauthorizedException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 
 import org.example.nextcommerce.member.dto.MemberDto;
@@ -40,9 +42,6 @@ public class PostService {
                                 .build();
 
         Long productId = productJdbcRepository.save(productDto);
-        if( productId == null){
-            throw new DatabaseException(ErrorCode.DBInsertFail);
-        }
 
         PostDto postDto = PostDto.builder()
                 .memberId(memberDto.getId())
@@ -53,11 +52,8 @@ public class PostService {
                 .build();
 
         Long postId = postJdbcRepository.save(postDto);
-        if(postId == null){
-            throw new DatabaseException(ErrorCode.DBInsertFail);
-        }
 
-        List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList);
+        List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList, postId);
         imageJdbcRepository.saveAll(imageDtoList, postId);
 
     }
@@ -68,11 +64,35 @@ public class PostService {
 
     @Transactional
     public void delete(Long postId, Long productId){
-        List<ImageDto> imageDtoList = imageJdbcRepository.findAllByPostId(postId);
-        imageFileService.deleteImageFiles(imageDtoList);
+        ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(postId);
+        imageFileService.deleteDirectoryAll(imageDto.getFilePath());
+
         imageJdbcRepository.deleteByPostId(postId);
         postJdbcRepository.deleteByPostId(postId);
         productJdbcRepository.deleteByProductId(productId);
     }
+
+    public void isPostAuthor(Long loginMemberId, Long postAuthorId){
+        if(!loginMemberId.equals(postAuthorId)){
+            throw new UnauthorizedException(ErrorCode.PostsUnAuthorized);
+        }
+    }
+
+    @Transactional
+    public void update(PostDto postDto, PostUpdateRequestDto postUpdateRequestDto, List<ImageRequestDto> imageRequestDtoList){
+        postDto.updatePostDto(postUpdateRequestDto.getPostContent(), postUpdateRequestDto.getPostTitle());
+        postJdbcRepository.update(postDto);
+        productJdbcRepository.update(postDto.getProductId(), postUpdateRequestDto.getProductPrice());
+        if(!imageRequestDtoList.isEmpty() && imageRequestDtoList.get(0).getContentType() != null){
+            ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(postDto.getPostId());
+            imageFileService.deleteDirectoryAll(imageDto.getFilePath());
+
+            List<ImageDto> updatedimageDtoList = imageFileService.parseImageFiles(imageRequestDtoList, postDto.getPostId());
+            imageJdbcRepository.deleteByPostId(postDto.getPostId());
+            imageJdbcRepository.saveAll(updatedimageDtoList, postDto.getPostId());
+        }
+    }
+
+
 
 }

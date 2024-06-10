@@ -5,13 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
 import org.example.nextcommerce.common.exception.FileHandleException;
-import org.example.nextcommerce.common.exception.UnauthorizedException;
-import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 
 import org.example.nextcommerce.member.dto.MemberDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 import org.example.nextcommerce.post.dto.PostDto;
 import org.example.nextcommerce.post.dto.PostRequestDto;
+import org.example.nextcommerce.post.dto.PostUpdateRequestDto;
 import org.example.nextcommerce.post.service.PostService;
 
 import org.springframework.http.HttpStatus;
@@ -71,10 +70,42 @@ public class PostApiController {
     public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId, @LoginMember MemberDto memberDto){
 
         PostDto postDto = postService.findPost(postId);
+        /*
         if(!postDto.getMemberId().equals(memberDto.getId())){
             throw new UnauthorizedException(ErrorCode.PostsUnAuthorized);
         }
+         */
+        postService.isPostAuthor(memberDto.getId(), postDto.getMemberId());
         postService.delete(postId, postDto.getProductId());
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @LoginRequired
+    @PatchMapping("/{postId}")
+    public ResponseEntity<HttpStatus> updatePost(@PathVariable Long postId, @RequestPart(required = false) List<MultipartFile> files, @RequestPart(value = "postUpdateRequestDto") PostUpdateRequestDto postUpdateRequestDto, @LoginMember MemberDto memberDto){
+
+        PostDto postDto = postService.findPost(postId);
+        postService.isPostAuthor(memberDto.getId(), postDto.getMemberId());
+
+        List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
+        if(!files.isEmpty() && files.get(0).getContentType() != null){
+            for(MultipartFile file : files){
+                ImageRequestDto imageRequestDto;
+                try{
+                    imageRequestDto = ImageRequestDto.builder()
+                            .imageInputStream(file.getInputStream())
+                            .originalName(file.getOriginalFilename())
+                            .contentType(file.getContentType())
+                            .fileSize(file.getSize())
+                            .build();
+                }catch (IOException e){
+                    throw new FileHandleException(e.getMessage());
+                }
+                imageRequestDtoList.add(imageRequestDto);
+            }
+        }
+        postService.update(postDto, postUpdateRequestDto ,imageRequestDtoList);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

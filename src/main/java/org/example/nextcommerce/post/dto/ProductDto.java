@@ -2,6 +2,7 @@ package org.example.nextcommerce.post.dto;
 
 import lombok.*;
 
+@ToString
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

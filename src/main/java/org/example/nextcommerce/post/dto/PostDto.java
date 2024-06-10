@@ -21,5 +21,9 @@ public class PostDto {
     public void updatePostId(Long postId){
         this.postId = postId;
     }
+    public void updatePostDto(String content, String title){
+        this.content = content;
+        this.title = title;
+    }
 
 }
