@@ -51,6 +51,11 @@ public class PostJdbcRepository {
                 return pstmt;
             }
         }, keyHolder);
+
+        if(keyHolder.getKey() == null){
+            throw new DatabaseException(ErrorCode.DBDataIdNotFound);
+        }
+
         dto.updatePostId(keyHolder.getKey().longValue());
         return dto.getPostId();
     }
@@ -70,6 +75,13 @@ public class PostJdbcRepository {
         String sql = "DELETE FROM posts WHERE post_id=?";
         if(jdbcTemplate.update(sql, postId) != 1){
             throw new DatabaseException(ErrorCode.PostsDeleteFail);
+        }
+    }
+
+    public void update(PostDto postDto){
+        String sql = "UPDATE posts SET content=?, title=? WHERE post_id=?";
+        if(jdbcTemplate.update(sql, postDto.getContent(), postDto.getTitle(), postDto.getPostId()) ==0 ){
+            throw new DatabaseException(ErrorCode.PostUpdateFail);
         }
     }
 
