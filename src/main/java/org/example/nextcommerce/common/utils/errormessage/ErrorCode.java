@@ -21,6 +21,7 @@ public enum ErrorCode {
     PostsNotFound(301, "Posts not found"),
     PostsDeleteFail(302, "Posts DB delete failed"),
     PostsUnAuthorized(303, "Post's author is not valid"),
+    PostUpdateFail(304, "Post update failed"),
 
     Images(400, "Images Error"),
     ImagesNotFound(401,"Images not found"),
@@ -29,14 +30,15 @@ public enum ErrorCode {
     Products(500, "Products Error"),
     ProductsNotFound(501, "Products not found"),
     ProductsDeleteFail(502, "Products DB delete failed"),
+    ProductUpdateFail(503, "Product update failed"),
 
     DB(700,"Database Error"),
     DBConnectionTimeOut(701, "Database connection time out"),
     DBInsertFail(702, "Database insert failed"),
     DBTransactionFail(703, "Database transaction failed"),
     DBUpdateFail(704, "Database update failed"),
-    DBDeleteFail(705, "Database delete failed");
-
+    DBDeleteFail(705, "Database delete failed"),
+    DBDataIdNotFound(706, "Database Data id not found" );
 
 
     private int code;
