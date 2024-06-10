@@ -1,9 +1,11 @@
 package org.example.nextcommerce.post.repository.jdbc;
 
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.example.nextcommerce.common.exception.DatabaseException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.post.dto.ProductDto;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -51,6 +53,11 @@ public class ProductJdbcRepository {
                 return pstmt;
             }
         }, keyHolder);
+
+        if(keyHolder.getKey() == null){
+            throw new DatabaseException(ErrorCode.DBDataIdNotFound);
+        }
+
         dto.updateId(keyHolder.getKey().longValue());
         return dto.getProductId();
     }
@@ -60,6 +67,25 @@ public class ProductJdbcRepository {
         if(jdbcTemplate.update(sql, productId) != 1){
             throw new DatabaseException(ErrorCode.ProductsDeleteFail);
         }
+    }
+
+    public ProductDto findByProductId(Long productId){
+        String sql = "SELECT * FROM products WHERE product_id=?";
+        ProductDto dto;
+        try{
+            dto = jdbcTemplate.queryForObject(sql, productDtoRowMapper(), productId);
+        }catch (EmptyResultDataAccessException e){
+            throw new DatabaseException(ErrorCode.ProductsNotFound);
+        }
+        return dto;
+    }
+
+    public void update(Long productId, String price){
+        String sql = "UPDATE products SET price=? WHERE product_id=?";
+        if(jdbcTemplate.update(sql, price, productId ) ==0){
+            throw new DatabaseException(ErrorCode.ProductUpdateFail);
+        }
+
     }
 
 
