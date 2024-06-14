@@ -41,10 +41,10 @@ public class MemberService {
     }
 
    public boolean isValidMemberDto(MemberDto memberDto){
-        if(!memberDto.isEmailValidation()){
+        if(!memberDto.isValidEmail()){
             throw new BadRequestException(ErrorCode.MemberEmailValidationFailed);
         }
-        if(!memberDto.isPasswordValidation()){
+        if(!memberDto.isValidPassword()){
             throw new BadRequestException(ErrorCode.MemberPwValidationFailed);
         }
         return true;
