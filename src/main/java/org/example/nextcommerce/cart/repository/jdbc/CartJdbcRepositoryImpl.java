@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class CartJdbcRepositoryImpl implements CartJdbcRepository{
@@ -20,6 +22,7 @@ public class CartJdbcRepositoryImpl implements CartJdbcRepository{
                    .cartId(rs.getLong("cart_id"))
                    .memberId(rs.getLong("member_id"))
                    .postId(rs.getLong("post_id"))
+                   .imageId(rs.getLong("image_id"))
                    .quantity(rs.getInt("quantity"))
                    .build();
            return dto;
@@ -28,10 +31,16 @@ public class CartJdbcRepositoryImpl implements CartJdbcRepository{
 
     @Override
     public void save(CartDto cartDto) {
-        String sql = "INSERT INTO cart (member_id, post_id, quantity) "
-                + "VALUES (?,?,?)";
-        if (jdbcTemplate.update(sql, cartDto.getMemberId(), cartDto.getPostId(), cartDto.getQuantity()) == 0){
+        String sql = "INSERT INTO cart (member_id, post_id,image_id ,quantity) "
+                + "VALUES (?,?,?,?)";
+        if (jdbcTemplate.update(sql, cartDto.getMemberId(), cartDto.getPostId(),cartDto.getImageId() ,cartDto.getQuantity()) == 0){
             throw new DatabaseException(ErrorCode.CartInsertFail);
         }
+    }
+
+    @Override
+    public List<CartDto> findAllByMemberId(Long memberId) {
+        String sql = "SELECT * FROM cart WHERE member_id=?";
+        return jdbcTemplate.query(sql, cartDtoRowMapper(), memberId);
     }
 }
