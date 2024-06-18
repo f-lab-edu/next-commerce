@@ -44,7 +44,10 @@ public enum ErrorCode {
     DBTransactionFail(703, "Database transaction failed"),
     DBUpdateFail(704, "Database update failed"),
     DBDeleteFail(705, "Database delete failed"),
-    DBDataIdNotFound(706, "Database Data id not found" );
+    DBDataIdNotFound(706, "Database Data id not found" ),
+
+    ImageFile(800, "Image file Error"),
+    ImageFileNotFound(801, "Image file not found");
 
 
     private int code;
