@@ -9,4 +9,7 @@ public interface CartService {
     public void save(Long memberId,CartRequestDto cartRequestDto);
     public byte[] getImageFileTop1(Long postId);
     public List<CartDto> getCartListAll(Long memberId);
+    public void delete(Long cartId);
+    public void deleteAll(Long memberId);
+
 }
