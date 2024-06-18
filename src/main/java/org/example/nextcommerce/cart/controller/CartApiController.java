@@ -50,6 +50,19 @@ public class CartApiController {
 
     }
 
+    @LoginRequired
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable Long cartId){
+        cartService.delete(cartId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @LoginRequired
+    @DeleteMapping()
+    public ResponseEntity<HttpStatus> deleteAll(@LoginMember MemberDto memberDto){
+        cartService.deleteAll(memberDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 
 
