@@ -9,4 +9,6 @@ public interface CartJdbcRepository {
 
     public void save(CartDto cartDto);
     public List<CartDto> findAllByMemberId(Long memberId);
+    public void deleteByCartId(Long cartId);
+    public void deleteAllByMemberId(Long memberId);
 }

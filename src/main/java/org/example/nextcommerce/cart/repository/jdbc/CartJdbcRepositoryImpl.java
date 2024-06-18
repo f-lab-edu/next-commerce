@@ -43,4 +43,21 @@ public class CartJdbcRepositoryImpl implements CartJdbcRepository{
         String sql = "SELECT * FROM cart WHERE member_id=?";
         return jdbcTemplate.query(sql, cartDtoRowMapper(), memberId);
     }
+
+    @Override
+    public void deleteByCartId(Long cartId) {
+        String sql = "DELETE FROM cart WHERE cart_id=?";
+        if(jdbcTemplate.update(sql, cartId) != 1){
+            throw new DatabaseException(ErrorCode.CartDeleteFail);
+        }
+    }
+
+    @Override
+    public void deleteAllByMemberId(Long memberId) {
+        String sql = "DELETE FROM cart WHERE member_id=?";
+        if(jdbcTemplate.update(sql,memberId) < 1){
+            throw new DatabaseException(ErrorCode.CartDeleteFail);
+        }
+
+    }
 }
