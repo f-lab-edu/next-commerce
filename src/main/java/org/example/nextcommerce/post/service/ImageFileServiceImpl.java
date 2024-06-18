@@ -111,4 +111,24 @@ public class ImageFileServiceImpl implements ImageFileService {
 
     }
 
+    @Override
+    public byte[] downloadImageFile(String imagePath) {
+        Path filePath = Paths.get(imagePath);
+        byte[] bytes;
+        try {
+            bytes = Files.readAllBytes(filePath);
+        }catch (Exception e){
+            throw new FileHandleException(e.getMessage());
+        }
+        return bytes;
+    }
+
+    @Override
+    public boolean validImageFile(String imagePath) {
+        Path filePath = Paths.get(imagePath);
+        if( Files.isDirectory(filePath) || !Files.isReadable(filePath) ){
+            return false;
+        }
+        return true;
+    }
 }

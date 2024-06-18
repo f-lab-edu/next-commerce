@@ -10,5 +10,8 @@ public interface ImageFileService {
     public List<ImageDto> parseImageFiles(List<ImageRequestDto> imageRequestDtoList, Long postId);
     public void deleteImageFiles(List<ImageDto> imageDtoList);
     public void deleteDirectoryAll(String filePath);
+    public byte[] downloadImageFile(String imagePath);
+    public boolean validImageFile(String imagePath);
+
 
 }
