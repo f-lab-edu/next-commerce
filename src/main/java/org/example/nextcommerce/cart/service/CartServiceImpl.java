@@ -33,7 +33,7 @@ public class CartServiceImpl implements  CartService{
     @Override
     public void save(Long memberId, CartRequestDto cartRequestDto) {
 
-        PostDto postDto = Optional.ofNullable( postJdbcRepository.findByPostId(cartRequestDto.getPostId()) )
+        Optional.ofNullable( postJdbcRepository.findByPostId(cartRequestDto.getPostId()) )
                 .orElseThrow(() -> new NotFoundException(ErrorCode.PostsNotFound));
 
         ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(cartRequestDto.getPostId());
