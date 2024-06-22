@@ -66,7 +66,7 @@ public class ImageJdbcRepository {
         }
     }
 
-    public ImageDto findTop1ByPostId(Long postId){
+    public ImageDto findOneByPostId(Long postId){
         String sql = "SELECT * FROM images WHERE post_id=? LIMIT 1 ";
         return jdbcTemplate.queryForObject(sql, imageDtoRowMapper(),postId);
     }

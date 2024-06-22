@@ -13,6 +13,8 @@ import org.example.nextcommerce.post.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.ProductJdbcRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -64,7 +66,7 @@ public class PostService {
 
     @Transactional
     public void delete(Long postId, Long productId){
-        ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(postId);
+        ImageDto imageDto = imageJdbcRepository.findOneByPostId(postId);
         imageFileService.deleteDirectoryAll(imageDto.getFilePath());
 
         imageJdbcRepository.deleteByPostId(postId);
@@ -84,7 +86,7 @@ public class PostService {
         postJdbcRepository.update(postDto);
         productJdbcRepository.update(postDto.getProductId(), postUpdateRequestDto.getProductPrice());
         if(!imageRequestDtoList.isEmpty() && imageRequestDtoList.get(0).getContentType() != null){
-            ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(postDto.getPostId());
+            ImageDto imageDto = imageJdbcRepository.findOneByPostId(postDto.getPostId());
             imageFileService.deleteDirectoryAll(imageDto.getFilePath());
 
             List<ImageDto> updatedimageDtoList = imageFileService.parseImageFiles(imageRequestDtoList, postDto.getPostId());
@@ -92,7 +94,5 @@ public class PostService {
             imageJdbcRepository.saveAll(updatedimageDtoList, postDto.getPostId());
         }
     }
-
-
 
 }

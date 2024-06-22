@@ -13,6 +13,7 @@ import org.example.nextcommerce.post.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.service.ImageFileService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,10 +34,9 @@ public class CartServiceImpl implements  CartService{
     @Override
     public void save(Long memberId, CartRequestDto cartRequestDto) {
 
-        Optional.ofNullable( postJdbcRepository.findByPostId(cartRequestDto.getPostId()) )
-                .orElseThrow(() -> new NotFoundException(ErrorCode.PostsNotFound));
+        postJdbcRepository.findByPostId(cartRequestDto.getPostId());
 
-        ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(cartRequestDto.getPostId());
+        ImageDto imageDto = imageJdbcRepository.findOneByPostId(cartRequestDto.getPostId());
 
         CartDto cartDto = CartDto.builder()
                 .memberId(memberId)
@@ -48,9 +48,9 @@ public class CartServiceImpl implements  CartService{
     }
 
     @Override
-    public byte[] getImageFileTop1(Long postId) {
+    public byte[] getImageFileOne(Long postId) {
 
-        ImageDto imageDto = imageJdbcRepository.findTop1ByPostId(postId);
+        ImageDto imageDto = imageJdbcRepository.findOneByPostId(postId);
 
         if(!imageFileService.validImageFile(imageDto.getFilePath())){
             throw new NotFoundException(ErrorCode.ImageFileNotFound);
@@ -63,6 +63,7 @@ public class CartServiceImpl implements  CartService{
 
         return cartJdbcRepository.findAllByMemberId(memberId);
     }
+
 
     @Override
     public void delete(Long cartId) {
