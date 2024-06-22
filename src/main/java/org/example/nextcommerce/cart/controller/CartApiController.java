@@ -35,14 +35,14 @@ public class CartApiController {
     @GetMapping(value = "/image/{postId}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> imageFile(@PathVariable Long postId){
 
-        byte[] bytes = cartService.getImageFileTop1(postId);
+        byte[] bytes = cartService.getImageFileOne(postId);
 
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(bytes);
     }
 
     @LoginRequired
     @GetMapping()
-    public ResponseEntity<List<CartDto>> cartListALl(@LoginMember MemberDto memberDto){
+    public ResponseEntity<List<CartDto>> cartListAll(@LoginMember MemberDto memberDto){
 
         List<CartDto> cartDtoList = cartService.getCartListAll(memberDto.getId());
 
