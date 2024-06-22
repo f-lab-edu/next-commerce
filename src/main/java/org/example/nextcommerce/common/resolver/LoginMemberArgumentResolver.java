@@ -21,7 +21,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(LoginMember.class);
+
+        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(LoginMember.class);
+        boolean isParameterMatch = MemberDto.class.isAssignableFrom(parameter.getParameterType());
+        return hasLoginAnnotation && isParameterMatch;
     }
 
 
