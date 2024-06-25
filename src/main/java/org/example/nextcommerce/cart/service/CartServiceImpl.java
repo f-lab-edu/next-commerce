@@ -30,13 +30,13 @@ public class CartServiceImpl implements  CartService{
     private final PostJdbcRepository postJdbcRepository;
 
 
-    @Transactional
+    @Transactional //삭제
     @Override
     public void save(Long memberId, CartRequestDto cartRequestDto) {
 
         postJdbcRepository.findByPostId(cartRequestDto.getPostId());
 
-        ImageDto imageDto = imageJdbcRepository.findOneByPostId(cartRequestDto.getPostId());
+        ImageDto imageDto = imageJdbcRepository.findRecentOneByPostId(cartRequestDto.getPostId());
 
         CartDto cartDto = CartDto.builder()
                 .memberId(memberId)
@@ -50,7 +50,7 @@ public class CartServiceImpl implements  CartService{
     @Override
     public byte[] getImageFileOne(Long postId) {
 
-        ImageDto imageDto = imageJdbcRepository.findOneByPostId(postId);
+        ImageDto imageDto = imageJdbcRepository.findRecentOneByPostId(postId);
 
         if(!imageFileService.validImageFile(imageDto.getFilePath())){
             throw new NotFoundException(ErrorCode.ImageFileNotFound);
@@ -74,5 +74,6 @@ public class CartServiceImpl implements  CartService{
     public void deleteAll(Long memberId) {
         cartJdbcRepository.deleteAllByMemberId(memberId);
     }
+
 }
 

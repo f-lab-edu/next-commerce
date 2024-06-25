@@ -2,6 +2,7 @@ package org.example.nextcommerce.post.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import org.example.nextcommerce.common.exception.DatabaseException;
+import org.example.nextcommerce.common.exception.NotFoundException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.example.nextcommerce.post.dto.ImageDto;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class ImageJdbcRepository {
                    .filePath(rs.getString("path"))
                    .originalName(rs.getString("original_name"))
                    .fileSize(rs.getLong("size"))
+                   .createdTime(rs.getTimestamp("created_time"))
                    .build();
            return dto;
         });
@@ -70,5 +75,13 @@ public class ImageJdbcRepository {
         String sql = "SELECT * FROM images WHERE post_id=? LIMIT 1 ";
         return jdbcTemplate.queryForObject(sql, imageDtoRowMapper(),postId);
     }
+
+    public ImageDto findRecentOneByPostId(Long postId){
+        String sql = "SELECT * FROM images WHERE post_id=?";
+        List<ImageDto> imageDtoList = jdbcTemplate.query(sql, imageDtoRowMapper(), postId);
+        return imageDtoList.stream().max(Comparator.comparing(ImageDto::getCreatedTime)).orElseThrow(DatabaseException::new);
+
+    }
+
 
 }
