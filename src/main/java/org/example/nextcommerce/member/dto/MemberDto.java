@@ -28,11 +28,11 @@ public class MemberDto {
         return this.id.equals(memberId);
     }
 
-    public boolean isEmailValidation(){
+    public boolean isValidEmail(){
         return Pattern.matches("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]{2,12})@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){2,12}[.][a-zA-Z]{2,3}$", this.email);
     }
 
-    public boolean isPasswordValidation(){
+    public boolean isValidPassword(){
         return Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", this.password);
     }
 

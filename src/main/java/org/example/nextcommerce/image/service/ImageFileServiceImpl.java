@@ -1,8 +1,8 @@
-package org.example.nextcommerce.post.service;
+package org.example.nextcommerce.image.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.exception.FileHandleException;
-import org.example.nextcommerce.post.dto.ImageDto;
+import org.example.nextcommerce.image.dto.ImageDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -111,4 +111,24 @@ public class ImageFileServiceImpl implements ImageFileService {
 
     }
 
+    @Override
+    public byte[] downloadImageFile(String imagePath) {
+        Path filePath = Paths.get(imagePath);
+        byte[] bytes;
+        try {
+            bytes = Files.readAllBytes(filePath);
+        }catch (Exception e){
+            throw new FileHandleException(e.getMessage());
+        }
+        return bytes;
+    }
+
+    @Override
+    public boolean validImageFile(String imagePath) {
+        Path filePath = Paths.get(imagePath);
+        if( Files.isDirectory(filePath) || Files.notExists(filePath, LinkOption.NOFOLLOW_LINKS) || !Files.isReadable(filePath) ){
+            return false;
+        }
+        return true;
+    }
 }

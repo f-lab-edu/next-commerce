@@ -32,13 +32,22 @@ public enum ErrorCode {
     ProductsDeleteFail(502, "Products DB delete failed"),
     ProductUpdateFail(503, "Product update failed"),
 
+    Cart(600, "Cart Error"),
+    CartNotFound(601, "Cart not found"),
+    CartInsertFail(602, "Cart DB insert failed"),
+    CartDeleteFail(603, "Cart DB delete failed"),
+
+
     DB(700,"Database Error"),
     DBConnectionTimeOut(701, "Database connection time out"),
     DBInsertFail(702, "Database insert failed"),
     DBTransactionFail(703, "Database transaction failed"),
     DBUpdateFail(704, "Database update failed"),
     DBDeleteFail(705, "Database delete failed"),
-    DBDataIdNotFound(706, "Database Data id not found" );
+    DBDataIdNotFound(706, "Database Data id not found" ),
+
+    ImageFile(800, "Image file Error"),
+    ImageFileNotFound(801, "Image file not found");
 
 
     private int code;

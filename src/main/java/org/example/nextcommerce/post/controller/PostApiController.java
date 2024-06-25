@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,23 +44,21 @@ public class PostApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+        List<ImageRequestDto> imageRequestDtoList = files.stream()
+                .map(file -> {
+                            try {
+                                return ImageRequestDto.builder()
+                                        .imageInputStream(file.getInputStream())
+                                        .originalName(file.getOriginalFilename())
+                                        .contentType(file.getContentType())
+                                        .fileSize(file.getSize())
+                                        .build();
+                            } catch (IOException e) {
+                                throw new FileHandleException(e.getMessage());
+                            }
+                        }
+                ).toList();
 
-        List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
-        for(MultipartFile file : files){
-            ImageRequestDto imageRequestDto;
-            try{
-                imageRequestDto = ImageRequestDto.builder()
-                        .imageInputStream(file.getInputStream())
-                        .originalName(file.getOriginalFilename())
-                        .contentType(file.getContentType())
-                        .fileSize(file.getSize())
-                        .build();
-            }catch (IOException e){
-                throw new FileHandleException(e.getMessage());
-            }
-            imageRequestDtoList.add(imageRequestDto);
-        }
-        //List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList);
         postService.save(imageRequestDtoList, postRequestDto, memberDto);
 
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -70,11 +69,6 @@ public class PostApiController {
     public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId, @LoginMember MemberDto memberDto){
 
         PostDto postDto = postService.findPost(postId);
-        /*
-        if(!postDto.getMemberId().equals(memberDto.getId())){
-            throw new UnauthorizedException(ErrorCode.PostsUnAuthorized);
-        }
-         */
         postService.isPostAuthor(memberDto.getId(), postDto.getMemberId());
         postService.delete(postId, postDto.getProductId());
 
@@ -90,20 +84,21 @@ public class PostApiController {
 
         List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
         if(!files.isEmpty() && files.get(0).getContentType() != null){
-            for(MultipartFile file : files){
-                ImageRequestDto imageRequestDto;
-                try{
-                    imageRequestDto = ImageRequestDto.builder()
-                            .imageInputStream(file.getInputStream())
-                            .originalName(file.getOriginalFilename())
-                            .contentType(file.getContentType())
-                            .fileSize(file.getSize())
-                            .build();
-                }catch (IOException e){
-                    throw new FileHandleException(e.getMessage());
-                }
-                imageRequestDtoList.add(imageRequestDto);
-            }
+            imageRequestDtoList = files.stream()
+                    .map(file -> {
+                                try {
+                                    return ImageRequestDto.builder()
+                                            .imageInputStream(file.getInputStream())
+                                            .originalName(file.getOriginalFilename())
+                                            .contentType(file.getContentType())
+                                            .fileSize(file.getSize())
+                                            .build();
+                                } catch (IOException e) {
+                                    throw new FileHandleException(e.getMessage());
+                                }
+                            }
+                    )
+                    .toList();
         }
         postService.update(postDto, postUpdateRequestDto ,imageRequestDtoList);
 
