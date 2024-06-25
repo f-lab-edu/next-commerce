@@ -4,11 +4,11 @@ import org.example.nextcommerce.cart.dto.CartDto;
 import org.example.nextcommerce.cart.dto.CartRequestDto;
 import org.example.nextcommerce.cart.repository.jdbc.CartJdbcRepository;
 
-import org.example.nextcommerce.post.dto.ImageDto;
+import org.example.nextcommerce.image.dto.ImageDto;
 import org.example.nextcommerce.post.dto.PostDto;
-import org.example.nextcommerce.post.repository.jdbc.ImageJdbcRepository;
+import org.example.nextcommerce.image.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
-import org.example.nextcommerce.post.service.ImageFileService;
+import org.example.nextcommerce.image.service.ImageFileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.*;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

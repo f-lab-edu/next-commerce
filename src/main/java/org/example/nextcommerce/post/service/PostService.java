@@ -1,20 +1,18 @@
 package org.example.nextcommerce.post.service;
 
-import jakarta.persistence.PostUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.nextcommerce.common.exception.DatabaseException;
 import org.example.nextcommerce.common.exception.UnauthorizedException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 
+import org.example.nextcommerce.image.dto.ImageDto;
+import org.example.nextcommerce.image.service.ImageFileService;
 import org.example.nextcommerce.member.dto.MemberDto;
 import org.example.nextcommerce.post.dto.*;
-import org.example.nextcommerce.post.repository.jdbc.ImageJdbcRepository;
+import org.example.nextcommerce.image.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.ProductJdbcRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

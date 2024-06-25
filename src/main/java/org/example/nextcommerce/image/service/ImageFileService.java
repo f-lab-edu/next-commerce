@@ -1,4 +1,4 @@
-package org.example.nextcommerce.post.service;
+package org.example.nextcommerce.image.service;
 
 import org.example.nextcommerce.image.dto.ImageDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;

@@ -1,10 +1,9 @@
-package org.example.nextcommerce.post.repository.jdbc;
+package org.example.nextcommerce.image.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import org.example.nextcommerce.common.exception.DatabaseException;
-import org.example.nextcommerce.common.exception.NotFoundException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
-import org.example.nextcommerce.post.dto.ImageDto;
+import org.example.nextcommerce.image.dto.ImageDto;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,8 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor

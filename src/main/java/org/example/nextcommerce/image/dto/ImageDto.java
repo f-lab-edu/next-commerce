@@ -1,4 +1,4 @@
-package org.example.nextcommerce.post.dto;
+package org.example.nextcommerce.image.dto;
 
 import lombok.*;
 

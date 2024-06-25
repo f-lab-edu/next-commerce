@@ -1,4 +1,4 @@
-package org.example.nextcommerce.post.service;
+package org.example.nextcommerce.image.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.exception.FileHandleException;

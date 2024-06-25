@@ -1,23 +1,23 @@
 package org.example.nextcommerce.post.service;
 
 import org.example.nextcommerce.common.exception.UnauthorizedException;
+import org.example.nextcommerce.image.dto.ImageDto;
+import org.example.nextcommerce.image.service.ImageFileService;
 import org.example.nextcommerce.member.dto.MemberDto;
 import org.example.nextcommerce.post.dto.*;
-import org.example.nextcommerce.post.repository.jdbc.ImageJdbcRepository;
+import org.example.nextcommerce.image.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.ProductJdbcRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
