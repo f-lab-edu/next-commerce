@@ -1,6 +1,6 @@
 package org.example.nextcommerce.post.service;
 
-import org.example.nextcommerce.post.dto.ImageDto;
+import org.example.nextcommerce.image.dto.ImageDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 
 import java.util.List;

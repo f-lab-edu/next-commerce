@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.cart.dto.CartDto;
 import org.example.nextcommerce.cart.dto.CartRequestDto;
+import org.example.nextcommerce.cart.dto.CartResponseDto;
 import org.example.nextcommerce.cart.service.CartService;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
@@ -30,22 +31,10 @@ public class CartApiController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
-    @LoginRequired
-    @GetMapping(value = "/image/{postId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> imageFile(@PathVariable Long postId){
-
-        byte[] bytes = cartService.getImageFileOne(postId);
-
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(bytes);
-    }
-
     @LoginRequired
     @GetMapping()
-    public ResponseEntity<List<CartDto>> cartListAll(@LoginMember MemberDto memberDto){
-
-        List<CartDto> cartDtoList = cartService.getCartListAll(memberDto.getId());
-
+    public ResponseEntity<List<CartDto>> cartListAll(@SessionAttribute Long MemberId){
+         List<CartDto> cartDtoList = cartService.getCartListAll(MemberId);
         return ResponseEntity.status(HttpStatus.OK).body(cartDtoList);
 
     }

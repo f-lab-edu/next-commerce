@@ -83,5 +83,10 @@ public class ImageJdbcRepository {
 
     }
 
+    public ImageDto findByImageId(Long imageId){
+        String sql = "SELECT * FROM images WHERE image_id=?";
+        return jdbcTemplate.queryForObject(sql, imageDtoRowMapper(), imageId);
+    }
+
 
 }

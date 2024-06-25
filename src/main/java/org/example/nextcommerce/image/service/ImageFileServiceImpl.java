@@ -2,7 +2,7 @@ package org.example.nextcommerce.post.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.exception.FileHandleException;
-import org.example.nextcommerce.post.dto.ImageDto;
+import org.example.nextcommerce.image.dto.ImageDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
