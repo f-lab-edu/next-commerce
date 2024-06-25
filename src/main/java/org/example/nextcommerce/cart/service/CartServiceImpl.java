@@ -28,9 +28,7 @@ public class CartServiceImpl implements  CartService{
     private final ImageFileService imageFileService;
     private final ImageJdbcRepository imageJdbcRepository;
     private final PostJdbcRepository postJdbcRepository;
-
-
-    @Transactional //삭제
+    
     @Override
     public void save(Long memberId, CartRequestDto cartRequestDto) {
 
