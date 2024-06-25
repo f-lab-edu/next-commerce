@@ -175,7 +175,7 @@ public class PostServiceTest {
 
         when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageDtoList);
         doNothing().when(imageJdbcRepository).saveAll(anyList(), anyLong());
-        
+
 
         //when
         postService.save(imageRequestDtoList, postRequestDto, memberDto);
