@@ -126,7 +126,7 @@ public class ImageFileServiceImpl implements ImageFileService {
     @Override
     public boolean validImageFile(String imagePath) {
         Path filePath = Paths.get(imagePath);
-        if( Files.isDirectory(filePath) || !Files.isReadable(filePath) ){
+        if( Files.isDirectory(filePath) || Files.notExists(filePath, LinkOption.NOFOLLOW_LINKS) || !Files.isReadable(filePath) ){
             return false;
         }
         return true;
