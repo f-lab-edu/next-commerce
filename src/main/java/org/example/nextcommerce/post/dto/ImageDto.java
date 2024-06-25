@@ -2,6 +2,8 @@ package org.example.nextcommerce.post.dto;
 
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -14,6 +16,7 @@ public class ImageDto {
     private String originalName;
     private String filePath;
     private Long fileSize;
+    private Timestamp createdTime;
 
 
    public ImageDto(String originalName, String filePath, Long fileSize){
