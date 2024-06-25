@@ -9,6 +9,9 @@ import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -53,5 +56,7 @@ public class MemberService {
    public void deleteMember(Long memberId){
         memberJdbcRepository.deleteByMemberId(memberId);
    }
+
+
 
 }
