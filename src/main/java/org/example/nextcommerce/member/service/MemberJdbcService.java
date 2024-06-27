@@ -9,40 +9,41 @@ import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberJdbcService implements MemberService<MemberDto>{
 
     private final PasswordEncoder passwordEncoder;
     private final MemberJdbcRepository memberJdbcRepository;
 
+    @Override
     public void create(MemberDto dto){
         dto.passwordCrypt(passwordEncoder);
         memberJdbcRepository.save(dto);
     }
 
+    @Override
     public void checkDuplicatedEmail(String email){
         if(memberJdbcRepository.findByEmail(email) != null){
             throw new BadRequestException(ErrorCode.MemberDuplicatedEmail);
         }
     }
 
-    public MemberDto checkValidMember(MemberDto inputMembetDto){
-        MemberDto dbDto = memberJdbcRepository.findByEmail(inputMembetDto.getEmail());
+    @Override
+    public Long checkValidMember(MemberDto inputMemberDto){
+        MemberDto dbDto = memberJdbcRepository.findByEmail(inputMemberDto.getEmail());
         if(dbDto == null){
             throw new MemberNotFoundException(ErrorCode.MemberNotFound);
         }
-        if(!passwordEncoder.matches(inputMembetDto.getPassword(), dbDto.getPassword())){
+        if(!passwordEncoder.matches(inputMemberDto.getPassword(), dbDto.getPassword())){
             throw new BadRequestException(ErrorCode.MemberPasswordMismatch);
         }
-        return dbDto;
+        return dbDto.getId();
     }
 
+    @Override
    public boolean isValidMemberDto(MemberDto memberDto){
         if(!memberDto.isValidEmail()){
             throw new BadRequestException(ErrorCode.MemberEmailValidationFailed);
@@ -53,10 +54,13 @@ public class MemberService {
         return true;
    }
 
+   @Override
    public void deleteMember(Long memberId){
         memberJdbcRepository.deleteByMemberId(memberId);
    }
 
-
-
+    @Override
+    public MemberDto checkLoginMember(Long memberId) {
+        return memberJdbcRepository.findByMemberId(memberId);
+    }
 }
