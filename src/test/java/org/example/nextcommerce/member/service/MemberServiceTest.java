@@ -2,21 +2,20 @@ package org.example.nextcommerce.member.service;
 
 import org.example.nextcommerce.common.exception.BadRequestException;
 import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.entity.Member;
 import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,12 +25,13 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class MemberServiceTest {
     @Autowired
-    private MemberService memberService;
+    private MemberJpaService memberService;
 
     @MockBean
-    private MemberJdbcRepository memberJdbcRepository;
+    private MemberJpaRepository memberJpaRepository;
 
     private MemberDto memberDto;
+    private Member member;
 
     @BeforeEach
     void setUp(){
@@ -40,13 +40,15 @@ public class MemberServiceTest {
                 .password("asdf123!")
                 .build();
 
+        member = memberDto.toEntity();
+
     }
 
     @Test
     @DisplayName("중복된 이메일이 존재하는 경우 BadRequestException")
     void isNotDuplicatedEmailExist(){
         //given
-        when(memberJdbcRepository.findByEmail(any())).thenReturn(memberDto);
+        when(memberJpaRepository.findMemberByEmail(any())).thenReturn(Optional.of(member));
         //when-then
         assertThrows(BadRequestException.class, ()->{
             memberService.checkDuplicatedEmail(memberDto.getEmail());
@@ -82,9 +84,9 @@ public class MemberServiceTest {
     @Transactional
     public void signUpSuccess(){
         //given
-        memberService.create(memberDto);
+        memberService.create(member);
 
-        verify(memberJdbcRepository).save(memberDto);
+        verify(memberJpaRepository).save(member);
     }
 
 
