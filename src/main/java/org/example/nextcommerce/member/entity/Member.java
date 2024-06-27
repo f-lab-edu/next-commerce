@@ -1,6 +1,7 @@
 package org.example.nextcommerce.member.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -28,24 +29,18 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Embedded
-    private Address address;
-
     @CreatedDate
-    private LocalDateTime createdTime;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime modifiedTime;
+    private LocalDateTime modifiedAt;
 
 
-    public Member(String email, String password, Address address){
+    @Builder
+    public Member(String email, String password){
         this.email = email;
         this.password = password;
-        this.address = address;
     }
 
-    public Member(String email){
-        this.email = email;
-    }
 
 }
