@@ -1,6 +1,7 @@
 package org.example.nextcommerce.post.dto;
 
 import lombok.*;
+import org.example.nextcommerce.post.entity.Product;
 
 @ToString
 @Getter
@@ -16,4 +17,15 @@ public class ProductDto {
     public void updateId(Long productId){
         this.productId = productId;
     }
+
+    public Product toEntity(){
+        return Product.builder()
+                .id(this.productId)
+                .code(this.code)
+                .name(this.name)
+                .price(this.price)
+                .stock(this.stock)
+                .build();
+    }
+
 }
