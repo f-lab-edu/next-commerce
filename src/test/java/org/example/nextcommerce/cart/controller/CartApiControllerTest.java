@@ -18,6 +18,7 @@ import org.example.nextcommerce.post.controller.PostApiControllerTest;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.image.service.ImageFileService;
 import org.example.nextcommerce.post.repository.jpa.PostJpaRepository;
+import org.example.nextcommerce.post.repository.jpa.ProductJpaRepository;
 import org.example.nextcommerce.post.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,29 +57,23 @@ public class CartApiControllerTest {
 
     @MockBean
     private MemberJpaService memberJpaService;
-    //private MemberJdbcService memberService;
     @MockBean
     private MemberJpaRepository memberJpaRepository;
-    //private MemberJdbcRepository memberJdbcRepository;
-
 
     @MockBean
     private PostService postService;
 
     @MockBean
     private CartJpaRepository cartJpaRepository;
-    //private CartJdbcRepository cartJdbcRepository;
 
     @MockBean
     private ImageFileService imageFileService;
 
     @MockBean
     private ImageJpaRepository imageJpaRepository;
-    //private ImageJdbcRepository imageJdbcRepository;
 
     @MockBean
-    private PostJpaRepository postJpaRepository;
-    //private PostJdbcRepository postJdbcRepository;
+    private ProductJpaRepository productJpaRepository;
 
 
     @MockBean
