@@ -1,10 +1,7 @@
 package org.example.nextcommerce.member.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,6 +12,8 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Member {
 
@@ -35,8 +34,6 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-
-    @Builder
     public Member(String email, String password){
         this.email = email;
         this.password = password;
