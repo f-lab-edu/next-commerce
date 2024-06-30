@@ -18,8 +18,10 @@ import org.example.nextcommerce.member.entity.Member;
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.example.nextcommerce.member.service.MemberJpaService;
 import org.example.nextcommerce.post.entity.Post;
+import org.example.nextcommerce.post.entity.Product;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.repository.jpa.PostJpaRepository;
+import org.example.nextcommerce.post.repository.jpa.ProductJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,14 +33,14 @@ public class CartServiceImpl implements  CartService{
 
     private final CartJpaRepository cartJpaRepository;
     private final ImageJpaRepository imageJpaRepository;
-    private final PostJpaRepository postJpaRepository;
+    private final ProductJpaRepository productJpaRepository;
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
     public void save(Long memberId, CartRequestDto cartRequestDto) {
 
-        Post post = postJpaRepository.findById(cartRequestDto.getPostId())
-                .orElseThrow(()->new NotFoundException(ErrorCode.PostsNotFound));
+        Product product = productJpaRepository.findById(cartRequestDto.getProductId())
+                .orElseThrow(()-> new NotFoundException(ErrorCode.ProductsNotFound));
 
         Image image = imageJpaRepository.findByCreatedAtByPostId(cartRequestDto.getPostId())
                 .orElseThrow(()->new NotFoundException(ErrorCode.ImagesNotFound));
@@ -48,7 +50,7 @@ public class CartServiceImpl implements  CartService{
 
         Cart cart = Cart.builder()
                 .member(member)
-                .post(post)
+                .product(product)
                 .image(image)
                 .quantity(cartRequestDto.getQuantity())
                 .build();
