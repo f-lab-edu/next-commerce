@@ -40,7 +40,7 @@ public class CartApiController {
                 .map(cart -> CartDto.builder()
                         .cartId(cart.getId())
                         .memberId(cart.getMember().getId())
-                        .postId(cart.getPost().getId())
+                        .productId(cart.getProduct().getId())
                         .imageId(cart.getImage().getId())
                         .quantity(cart.getQuantity())
                         .build()).toList();
