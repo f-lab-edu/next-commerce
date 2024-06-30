@@ -8,18 +8,17 @@ import org.example.nextcommerce.common.exception.FileHandleException;
 
 import org.example.nextcommerce.member.dto.MemberDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
-import org.example.nextcommerce.post.dto.PostDto;
 import org.example.nextcommerce.post.dto.PostRequestDto;
 import org.example.nextcommerce.post.dto.PostUpdateRequestDto;
-import org.example.nextcommerce.post.service.PostService;
+import org.example.nextcommerce.post.entity.Post;
 
+import org.example.nextcommerce.post.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,7 @@ import java.util.List;
 @RequestMapping("/api/posts")
 public class PostApiController {
 
+    //private final PostJdbcService postService;
     private final PostService postService;
 
     @LoginRequired
@@ -68,9 +68,9 @@ public class PostApiController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId, @LoginMember MemberDto memberDto){
 
-        PostDto postDto = postService.findPost(postId);
-        postService.isPostAuthor(memberDto.getId(), postDto.getMemberId());
-        postService.delete(postId, postDto.getProductId());
+        Post post = postService.findPost(postId);
+        postService.isPostAuthor(memberDto.getId(), post.getMember().getId());
+        postService.delete(postId, post.getProduct().getId());
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -79,8 +79,8 @@ public class PostApiController {
     @PatchMapping("/{postId}")
     public ResponseEntity<HttpStatus> updatePost(@PathVariable Long postId, @RequestPart(required = false) List<MultipartFile> files, @RequestPart(value = "postUpdateRequestDto") PostUpdateRequestDto postUpdateRequestDto, @LoginMember MemberDto memberDto){
 
-        PostDto postDto = postService.findPost(postId);
-        postService.isPostAuthor(memberDto.getId(), postDto.getMemberId());
+        Post post = postService.findPost(postId);
+        postService.isPostAuthor(memberDto.getId(), post.getMember().getId());
 
         List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
         if(!files.isEmpty() && files.get(0).getContentType() != null){
@@ -100,7 +100,7 @@ public class PostApiController {
                     )
                     .toList();
         }
-        postService.update(postDto, postUpdateRequestDto ,imageRequestDtoList);
+        postService.update(post, postUpdateRequestDto ,imageRequestDtoList);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
