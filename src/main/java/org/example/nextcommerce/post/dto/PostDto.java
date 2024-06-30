@@ -1,6 +1,7 @@
 package org.example.nextcommerce.post.dto;
 
 import lombok.*;
+import org.example.nextcommerce.post.entity.Post;
 
 import java.util.List;
 
@@ -25,5 +26,7 @@ public class PostDto {
         this.content = content;
         this.title = title;
     }
+
+
 
 }
