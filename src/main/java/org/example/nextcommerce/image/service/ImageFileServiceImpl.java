@@ -31,9 +31,9 @@ public class ImageFileServiceImpl implements ImageFileService {
 
 
     @Override
-    public List<Image> parseImageFiles(List<ImageRequestDto> imageRequestDtoList, Long postId){
+    public List<ImageDto> parseImageFiles(List<ImageRequestDto> imageRequestDtoList, Long postId){
 
-        List<Image> imageList = new ArrayList<>();
+        List<ImageDto> imageDtoList = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDate = now.format(dateTimeFormatter);
@@ -70,16 +70,17 @@ public class ImageFileServiceImpl implements ImageFileService {
                 throw new FileHandleException(e.getMessage());
             }
 
-            Image image = Image.builder()
+            ImageDto imageDto = ImageDto.builder()
                     .originalName(imageRequestDto.getOriginalName())
                     .filePath(imagePath.toString())
                     .fileSize(imageRequestDto.getFileSize())
+                    .postId(postId)
                     .build();
 
-            imageList.add(image);
+            imageDtoList.add(imageDto);
         }
 
-        return imageList;
+        return imageDtoList;
     }
 
     @Override

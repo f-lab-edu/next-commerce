@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ImageFileService {
 
-    public List<Image> parseImageFiles(List<ImageRequestDto> imageRequestDtoList, Long postId);
+    public List<ImageDto> parseImageFiles(List<ImageRequestDto> imageRequestDtoList, Long postId);
     public void deleteImageFiles(List<Image> imageList);
     public void deleteDirectoryAll(String filePath);
     public byte[] downloadImageFile(String imagePath);
