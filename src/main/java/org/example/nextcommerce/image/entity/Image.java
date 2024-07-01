@@ -3,6 +3,7 @@ package org.example.nextcommerce.image.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.nextcommerce.post.entity.Post;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class Image {
     @Column(name = "SIZE")
     private Long fileSize;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
     public Image(Post post,String originalName, String filePath, Long fileSize){
