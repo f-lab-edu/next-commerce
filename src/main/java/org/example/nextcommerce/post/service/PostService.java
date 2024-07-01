@@ -10,6 +10,8 @@ import org.example.nextcommerce.image.entity.Image;
 import org.example.nextcommerce.image.repository.jpa.ImageJpaRepository;
 import org.example.nextcommerce.image.service.ImageFileService;
 import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.entity.Member;
+import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 import org.example.nextcommerce.post.dto.PostDto;
 import org.example.nextcommerce.post.dto.PostRequestDto;
@@ -32,6 +34,8 @@ public class PostService {
     private final ImageJpaRepository imageJpaRepository;
     private final ProductJpaRepository productJpaRepository;
     private final ImageFileService imageFileService;
+    private final MemberJpaRepository memberJpaRepository;
+
 
     @Transactional
     public void save(List<ImageRequestDto> imageRequestDtoList, PostRequestDto postRequestDto, MemberDto memberDto) {
@@ -43,8 +47,11 @@ public class PostService {
                 .build();
         Product saveProduct = productJpaRepository.save(product);
 
+        Member member = memberJpaRepository.findById(memberDto.getId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.MemberNotFound));
+
         Post post = Post.builder()
-                .member(memberDto.toEntity())
+                .member(member)
                 .product(saveProduct)
                 .content(postRequestDto.getPostContent())
                 .title(postRequestDto.getPostTitle())
@@ -52,7 +59,16 @@ public class PostService {
                 .build();
         Post savePost = postJpaRepository.save(post);
 
-        List<Image> imageList = imageFileService.parseImageFiles(imageRequestDtoList, post.getId());
+        List<ImageDto> imageDtoList = imageFileService.parseImageFiles(imageRequestDtoList, post.getId());
+        List<Image> imageList = imageDtoList.stream()
+                        .map(imageDto -> {
+                            return Image.builder()
+                                    .post(savePost)
+                                    .originalName(imageDto.getOriginalName())
+                                    .filePath(imageDto.getFilePath())
+                                    .fileSize(imageDto.getFileSize())
+                                    .build();
+                        }).toList();
         imageJpaRepository.saveAll(imageList);
 
     }
@@ -98,8 +114,18 @@ public class PostService {
                     .orElseThrow(()->new DatabaseException(ErrorCode.ImagesNotFound));
             imageFileService.deleteDirectoryAll(image.getFilePath());
 
-            List<Image> updatedImageList = imageFileService.parseImageFiles(imageRequestDtoList, post.getId());
+            List<ImageDto> updatedImageDtoList = imageFileService.parseImageFiles(imageRequestDtoList, post.getId());
             imageJpaRepository.deleteAllByPostId(post.getId());
+
+            List<Image> updatedImageList = updatedImageDtoList.stream()
+                            .map(imageDto -> {
+                                return Image.builder()
+                                        .post(post)
+                                        .originalName(imageDto.getOriginalName())
+                                        .filePath(image.getFilePath())
+                                        .fileSize(image.getFileSize())
+                                        .build();
+                            }).toList();
             imageJpaRepository.saveAll(updatedImageList);
 
         }

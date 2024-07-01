@@ -183,10 +183,20 @@ public class PostServiceTest {
         imageList.add(image);
         List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
         imageRequestDtoList.add(imageRequestDto);
+        List<ImageDto> imageDtoList = imageList.stream()
+                        .map(image1 -> {
+                            return ImageDto.builder()
+                                    .imageId(image1.getId())
+                                    .postId(image1.getPost().getId())
+                                    .originalName(image1.getOriginalName())
+                                    .filePath(image1.getFilePath())
+                                    .fileSize(image1.getFileSize())
+                                    .build();
+                        }).toList();
 
         when(productJpaRepository.save(any())).thenReturn(product);
         when(postJpaRepository.save(any())).thenReturn(post);
-        when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageList);
+        when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageDtoList);
         when(imageJpaRepository.saveAll(imageList)).thenReturn(imageList);
 
         //when
@@ -198,7 +208,7 @@ public class PostServiceTest {
         assertThat(postJpaRepository.save(post)).isNotNull();
         assertThat(postJpaRepository.save(post)).isEqualTo(post);
         assertThat(imageFileService.parseImageFiles(imageRequestDtoList, post.getId())).isNotNull();
-        assertThat(imageFileService.parseImageFiles(imageRequestDtoList, post.getId())).isEqualTo(imageList);
+        assertThat(imageFileService.parseImageFiles(imageRequestDtoList, post.getId())).isEqualTo(imageDtoList);
 
         verify(imageJpaRepository).saveAll(anyList());
     }
@@ -219,7 +229,17 @@ public class PostServiceTest {
 
         List<Image> imageList = new ArrayList<>();
         imageList.add(image);
-        when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageList);
+        List<ImageDto> imageDtoList = imageList.stream()
+                        .map(image1 -> {
+                            return ImageDto.builder()
+                                    .imageId(image1.getId())
+                                    .postId(image1.getPost().getId())
+                                    .originalName(image1.getOriginalName())
+                                    .filePath(image1.getFilePath())
+                                    .fileSize(image1.getFileSize())
+                                    .build();
+                        }).toList();
+        when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageDtoList);
 
         doNothing().when(imageJpaRepository).deleteAllByPostId(anyLong());
         when(imageJpaRepository.saveAll(anyList())).thenReturn(imageList);
@@ -242,7 +262,7 @@ public class PostServiceTest {
         assertThat(imageJpaRepository.findByCreatedAtByPostId(anyLong())).isEqualTo(Optional.of(image));
         //verify(imageFileService).deleteDirectoryAll(anyString());
         assertThat(imageFileService.parseImageFiles(anyList(),anyLong())).isNotNull();
-        assertThat(imageFileService.parseImageFiles(anyList(),anyLong())).isEqualTo(imageList);
+        assertThat(imageFileService.parseImageFiles(anyList(),anyLong())).isEqualTo(imageDtoList);
 
         verify(imageJpaRepository).deleteAllByPostId(anyLong());
         assertThat(imageJpaRepository.saveAll(anyList())).isEqualTo(imageList);
