@@ -21,7 +21,7 @@ public class CartJdbcRepositoryImpl implements CartJdbcRepository{
            CartDto dto = CartDto.builder()
                    .cartId(rs.getLong("cart_id"))
                    .memberId(rs.getLong("member_id"))
-                   .postId(rs.getLong("post_id"))
+                   .productId(rs.getLong("product_id"))
                    .imageId(rs.getLong("image_id"))
                    .quantity(rs.getInt("quantity"))
                    .build();
@@ -31,9 +31,9 @@ public class CartJdbcRepositoryImpl implements CartJdbcRepository{
 
     @Override
     public void save(CartDto cartDto) {
-        String sql = "INSERT INTO cart (member_id, post_id,image_id ,quantity) "
+        String sql = "INSERT INTO cart (member_id, product_id,image_id ,quantity) "
                 + "VALUES (?,?,?,?)";
-        if (jdbcTemplate.update(sql, cartDto.getMemberId(), cartDto.getPostId(),cartDto.getImageId() ,cartDto.getQuantity()) == 0){
+        if (jdbcTemplate.update(sql, cartDto.getMemberId(), cartDto.getProductId(),cartDto.getImageId() ,cartDto.getQuantity()) == 0){
             throw new DatabaseException(ErrorCode.CartInsertFail);
         }
     }

@@ -1,8 +1,7 @@
 package org.example.nextcommerce.image.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.nextcommerce.common.annotation.LoginRequired;
-import org.example.nextcommerce.image.service.ImageService;
+import org.example.nextcommerce.image.service.ImageJpaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/image")
 public class ImageApiController {
-    private final ImageService imageService;
+    //private final ImageJdbcService imageService;
+    private final ImageJpaService imageService;
 
     @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> imageFile(@PathVariable Long imageId){

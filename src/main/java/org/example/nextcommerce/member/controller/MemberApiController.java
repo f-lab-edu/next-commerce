@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
 import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.service.MemberService;
+import org.example.nextcommerce.member.service.MemberJdbcService;
+import org.example.nextcommerce.member.service.MemberJpaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/members")
 public class MemberApiController {
 
-    private final MemberService memberService;
+    //private final MemberJdbcService memberService;
+    private final MemberJpaService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody MemberDto dto){
@@ -25,14 +29,15 @@ public class MemberApiController {
 
         memberService.checkDuplicatedEmail(dto.getEmail());
 
-        memberService.create(dto);
+        dto.passwordCrypt(passwordEncoder);
+        memberService.create(dto.toEntity());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/signin")
     public ResponseEntity<HttpStatus> login(@RequestBody MemberDto dto, HttpSession httpSession){
-        MemberDto dbDto = memberService.checkValidMember(dto);
-        httpSession.setAttribute("MemberId", dbDto.getId());
+        Long memberId = memberService.checkValidMember(dto.toEntity());
+        httpSession.setAttribute("MemberId", memberId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

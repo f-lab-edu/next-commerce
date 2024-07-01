@@ -1,6 +1,7 @@
 package org.example.nextcommerce.member.dto;
 
 import lombok.*;
+import org.example.nextcommerce.member.entity.Member;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.regex.Pattern;
@@ -34,6 +35,13 @@ public class MemberDto {
 
     public boolean isValidPassword(){
         return Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", this.password);
+    }
+
+    public Member toEntity(){
+        return Member.builder()
+                .email(this.email)
+                .password(this.password)
+                .build();
     }
 
 
