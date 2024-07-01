@@ -23,6 +23,7 @@ import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.repository.jpa.PostJpaRepository;
 import org.example.nextcommerce.post.repository.jpa.ProductJpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,8 +70,9 @@ public class CartServiceImpl implements  CartService{
     }
 
     @Override
+    @Transactional
     public void deleteAll(Long memberId) {
-        cartJpaRepository.findAllByMemberId(memberId);
+        cartJpaRepository.deleteAllByMemberId(memberId);
     }
 
 }
