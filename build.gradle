@@ -36,6 +36,9 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'commons-io:commons-io:2.11.0'    /* Apache commons-io */
 	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 }
 
 tasks.named('bootBuildImage') {
