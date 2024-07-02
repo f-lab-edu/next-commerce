@@ -60,7 +60,7 @@ public class CartServiceImpl implements  CartService{
     }
 
     @Override
-    public List<Cart> getCartListAll(Long memberId) {
+    public List<Cart> getAllCarts(Long memberId) {
         return cartJpaRepository.findAllByMemberId(memberId);
     }
 

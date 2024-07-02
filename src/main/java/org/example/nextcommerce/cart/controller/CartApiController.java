@@ -35,7 +35,7 @@ public class CartApiController {
     @LoginRequired
     @GetMapping()
     public ResponseEntity<List<CartDto>> cartListAll(@SessionAttribute Long MemberId){
-        List<Cart> cartList = cartService.getCartListAll(MemberId);
+        List<Cart> cartList = cartService.getAllCarts(MemberId);
         List<CartDto> cartDtoList = cartList.stream()
                 .map(cart -> CartDto.builder()
                         .cartId(cart.getId())

@@ -146,7 +146,7 @@ public class CartApiControllerTest {
     @Test
     public void successCartListAll() throws Exception{
         //given
-        given(cartService.getCartListAll(anyLong())).willReturn(List.of());
+        given(cartService.getAllCarts(anyLong())).willReturn(List.of());
 
         //then
         mockMvc.perform(get("/api/cart")
