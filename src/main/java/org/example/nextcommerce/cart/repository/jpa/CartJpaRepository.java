@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CartJpaRepository extends JpaRepository<Cart, Long> {
-
-    @Query(value = "select c from Cart c where c.member.id = :memberId")
     List<Cart> findAllByMemberId(Long memberId);
 
     @Modifying
