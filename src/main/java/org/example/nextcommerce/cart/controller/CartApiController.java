@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.cart.dto.CartDto;
 import org.example.nextcommerce.cart.dto.CartRequestDto;
 import org.example.nextcommerce.cart.dto.CartResponseDto;
+import org.example.nextcommerce.cart.entity.Cart;
 import org.example.nextcommerce.cart.service.CartService;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
@@ -34,7 +35,15 @@ public class CartApiController {
     @LoginRequired
     @GetMapping()
     public ResponseEntity<List<CartDto>> cartListAll(@SessionAttribute Long MemberId){
-         List<CartDto> cartDtoList = cartService.getCartListAll(MemberId);
+        List<Cart> cartList = cartService.getAllCarts(MemberId);
+        List<CartDto> cartDtoList = cartList.stream()
+                .map(cart -> CartDto.builder()
+                        .cartId(cart.getId())
+                        .memberId(cart.getMember().getId())
+                        .productId(cart.getProduct().getId())
+                        .imageId(cart.getImage().getId())
+                        .quantity(cart.getQuantity())
+                        .build()).toList();
         return ResponseEntity.status(HttpStatus.OK).body(cartDtoList);
 
     }

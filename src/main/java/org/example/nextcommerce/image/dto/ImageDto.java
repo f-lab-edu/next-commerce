@@ -1,6 +1,7 @@
 package org.example.nextcommerce.image.dto;
 
 import lombok.*;
+import org.example.nextcommerce.image.entity.Image;
 
 import java.sql.Timestamp;
 
@@ -24,8 +25,5 @@ public class ImageDto {
        this.filePath = filePath;
        this.fileSize = fileSize;
    }
-
-
-
 
 }

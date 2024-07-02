@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.nextcommerce.common.resolver.LoginMemberArgumentResolver;
 
 import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
 
-import org.example.nextcommerce.post.dto.PostDto;
+import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.example.nextcommerce.post.dto.PostRequestDto;
 
+import org.example.nextcommerce.post.dto.ProductDto;
+import org.example.nextcommerce.post.entity.Post;
 import org.example.nextcommerce.post.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +40,6 @@ import java.nio.charset.StandardCharsets;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,14 +52,17 @@ public class PostApiControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private MemberJdbcRepository memberJdbcRepository;
+    private MemberJpaRepository memberJpaRepository;
+    //private MemberJdbcRepository memberJdbcRepository;
 
     @MockBean
     private PostService postService;
+    //private PostJdbcService postService;
 
     @Autowired
     private PostApiController postApiController;
-
+    private MemberDto memberDto;
+    private ProductDto productDto;
     private MockMvc mockMvc;
     private PostRequestDto postRequestDto;
     private MockHttpSession mockHttpSession;
@@ -86,7 +89,7 @@ public class PostApiControllerTest {
                 .setCustomArgumentResolvers(mockManagerArgumentResolver)
                 .build();
 
-        MemberDto memberDto = MemberDto.builder()
+        memberDto = MemberDto.builder()
                 .id(999L)
                 .email("test@naver.com")
                 .password("asdf7890*")
@@ -105,6 +108,13 @@ public class PostApiControllerTest {
                 .postCategory("tech")
                 .build();
 
+        productDto = ProductDto.builder()
+                .productId(1L)
+                .name("product")
+                .code("code")
+                .stock(100)
+                .price("20000")
+                .build();
     }
 
     @Test
@@ -127,7 +137,7 @@ public class PostApiControllerTest {
     @Test
     @DisplayName("게시물 삭제 성공 테스트")
     public void successDeletePost() throws Exception{
-
+        /*
         PostDto postDto = PostDto.builder()
                 .postId(1L)
                 .memberId(1L)
@@ -137,7 +147,19 @@ public class PostApiControllerTest {
                 .category("tech")
                 .build();
 
-        given(postService.findPost(any())).willReturn(postDto);
+         */
+        Post post = Post.builder()
+                .id(1L)
+                .member(memberDto.toEntity())
+                .product(productDto.toEntity())
+                .title("title")
+                .content("content")
+                .category("tech")
+                .build();
+
+
+
+        given(postService.findPost(any())).willReturn(post);
         doNothing().when(postService).isPostAuthor(any(), any());
         doNothing().when(postService).delete(any(), any());
         mockMvc.perform(delete("/api/posts/1").contentType(MediaType.APPLICATION_JSON).session(mockHttpSession))

@@ -3,6 +3,7 @@ package org.example.nextcommerce.image.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.common.exception.FileHandleException;
 import org.example.nextcommerce.image.dto.ImageDto;
+import org.example.nextcommerce.image.entity.Image;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -73,6 +74,7 @@ public class ImageFileServiceImpl implements ImageFileService {
                     .originalName(imageRequestDto.getOriginalName())
                     .filePath(imagePath.toString())
                     .fileSize(imageRequestDto.getFileSize())
+                    .postId(postId)
                     .build();
 
             imageDtoList.add(imageDto);
@@ -82,9 +84,9 @@ public class ImageFileServiceImpl implements ImageFileService {
     }
 
     @Override
-    public void deleteImageFiles(List<ImageDto> imageDtoList) {
-        for(ImageDto imageDto : imageDtoList){
-            Path filePath = Paths.get(imageDto.getFilePath());
+    public void deleteImageFiles(List<Image> imageList) {
+        for(Image image : imageList){
+            Path filePath = Paths.get(image.getFilePath());
             log.info(filePath.toString());
             try{
                 Files.deleteIfExists(filePath);

@@ -1,32 +1,27 @@
 package org.example.nextcommerce.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
-import org.example.nextcommerce.common.interceptor.AuthInterceptor;
 import org.example.nextcommerce.member.dto.MemberDto;
 import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
+import org.example.nextcommerce.member.service.MemberJdbcService;
+import org.example.nextcommerce.member.service.MemberJpaService;
 import org.example.nextcommerce.member.service.MemberService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,10 +39,14 @@ public class MemberApiControllerTest {
 
 
     @MockBean
-    private MemberService memberService;
+    private MemberJpaRepository memberJpaRepository;
 
     @MockBean
-    private MemberJdbcRepository memberJdbcRepository;
+    private MemberJpaService memberJpaService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
 
     private MockHttpSession mockHttpSession;
 

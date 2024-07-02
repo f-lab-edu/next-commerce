@@ -1,9 +1,7 @@
 package org.example.nextcommerce.member.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,12 +12,14 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MEMBER_ID")
+    @Column(name = "member_id")
     private Long id;
 
     @Column(nullable = false)
@@ -28,24 +28,16 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Embedded
-    private Address address;
-
     @CreatedDate
-    private LocalDateTime createdTime;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime modifiedTime;
+    private LocalDateTime modifiedAt;
 
-
-    public Member(String email, String password, Address address){
+    public Member(String email, String password){
         this.email = email;
         this.password = password;
-        this.address = address;
     }
 
-    public Member(String email){
-        this.email = email;
-    }
 
 }

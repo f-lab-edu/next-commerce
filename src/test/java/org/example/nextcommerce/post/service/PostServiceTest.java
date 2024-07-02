@@ -2,12 +2,19 @@ package org.example.nextcommerce.post.service;
 
 import org.example.nextcommerce.common.exception.UnauthorizedException;
 import org.example.nextcommerce.image.dto.ImageDto;
+import org.example.nextcommerce.image.entity.Image;
+import org.example.nextcommerce.image.repository.jpa.ImageJpaRepository;
 import org.example.nextcommerce.image.service.ImageFileService;
+import org.example.nextcommerce.image.service.ImageJpaService;
 import org.example.nextcommerce.member.dto.MemberDto;
 import org.example.nextcommerce.post.dto.*;
 import org.example.nextcommerce.image.repository.jdbc.ImageJdbcRepository;
+import org.example.nextcommerce.post.entity.Post;
+import org.example.nextcommerce.post.entity.Product;
 import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.post.repository.jdbc.ProductJdbcRepository;
+import org.example.nextcommerce.post.repository.jpa.PostJpaRepository;
+import org.example.nextcommerce.post.repository.jpa.ProductJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +29,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,24 +45,26 @@ public class PostServiceTest {
     private PostService postService;
 
     @MockBean
-    private PostJdbcRepository postJdbcRepository;
+    private PostJpaRepository postJpaRepository;
 
     @MockBean
-    private ImageJdbcRepository imageJdbcRepository;
+    private ImageJpaRepository imageJpaRepository;
 
     @MockBean
-    private ProductJdbcRepository productJdbcRepository;
+    private ProductJpaRepository productJpaRepository;
 
     @MockBean
     private ImageFileService imageFileService;
 
     private PostDto postDto;
-    private ImageDto imageDto;
+    private Image image;
     private ImageRequestDto imageRequestDto;
     private ProductDto productDto;
+    private Product product;
     private PostRequestDto postRequestDto;
     private MemberDto memberDto;
 
+    private Post post;
 
 
     @BeforeEach
@@ -69,13 +80,6 @@ public class PostServiceTest {
 
         ClassPathResource classPathResource = new ClassPathResource("/test.jpg");
 
-        imageDto = ImageDto.builder()
-                .imageId(1L)
-                .postId(1L)
-                .originalName(classPathResource.getFilename())
-                .filePath(classPathResource.getPath())
-                .fileSize(classPathResource.contentLength())
-                .build();
 
         imageRequestDto = ImageRequestDto.builder()
                 .imageInputStream(classPathResource.getInputStream())
@@ -107,6 +111,24 @@ public class PostServiceTest {
                 .password("asdf1234!")
                 .build();
 
+        product = productDto.toEntity();
+
+        post = Post.builder()
+                .id(1L)
+                .member(memberDto.toEntity())
+                .product(product)
+                .title("title")
+                .content("content")
+                .category("tech")
+                .build();
+
+        image = Image.builder()
+                .id(1L)
+                .post(post)
+                .originalName(classPathResource.getFilename())
+                .filePath(classPathResource.getPath())
+                .fileSize(classPathResource.contentLength())
+                .build();
 
     }
 
@@ -118,7 +140,7 @@ public class PostServiceTest {
 
         //when-then
         assertThrows(UnauthorizedException.class, ()->{
-            postService.isPostAuthor(loginMemberId, postDto.getMemberId());
+            postService.isPostAuthor(loginMemberId, post.getMember().getId());
         });
     }
 
@@ -126,116 +148,126 @@ public class PostServiceTest {
     @DisplayName("게시물 조회 성공 테스트")
     public void successFindPost(){
         //given
-        when(postJdbcRepository.findByPostId(any())).thenReturn(postDto);
+        when(postJpaRepository.findById(anyLong())).thenReturn(Optional.of(post));
 
         //when
-        PostDto findPostDto = postService.findPost(postDto.getPostId());
-
+        Post findPost = postService.findPost(post.getId());
         //then
-        assertThat(findPostDto).isNotNull();
-        assertThat(findPostDto.getPostId()).isEqualTo(postDto.getPostId());
-        assertThat(findPostDto.getProductId()).isEqualTo(postDto.getProductId());
+        assertThat(findPost).isNotNull();
+        assertThat(findPost.getId()).isEqualTo(post.getId());
+        assertThat(findPost.getProduct().getId()).isEqualTo(postDto.getProductId());
     }
 
     @Test
     @DisplayName("게시물 삭제 성공 테스트")
     public void successDeletePost(){
         //given
-
-        when(imageJdbcRepository.findOneByPostId(postDto.getPostId())).thenReturn(imageDto);
-        /*
-        doNothing().when(imageFileService).deleteDirectoryAll(imageDto.getFilePath());
-        doNothing().when(imageJdbcRepository).deleteByPostId(postDto.getPostId());
-        doNothing().when(postJdbcRepository).deleteByPostId(postDto.getPostId());
-        doNothing().when(productJdbcRepository).deleteByProductId(postDto.getProductId());
-         */
+        when(imageJpaRepository.findByCreatedAtByPostId(post.getId())).thenReturn(Optional.of(image));
 
         //when
         postService.delete(postDto.getPostId(), postDto.getProductId());
 
         //then
-        verify(imageJdbcRepository).findOneByPostId(anyLong());
-        verify(imageFileService).deleteDirectoryAll(anyString());
-        verify(imageJdbcRepository).deleteByPostId(anyLong());
-        verify(postJdbcRepository).deleteByPostId(anyLong());
-        verify(productJdbcRepository).deleteByProductId(anyLong());
+        verify(imageJpaRepository).findByCreatedAtByPostId(anyLong());
+        //verify(imageFileService).deleteDirectoryAll(anyString());
+        verify(imageJpaRepository).findByCreatedAtByPostId(anyLong());
+        verify(postJpaRepository).deleteById(anyLong());
+        verify(productJpaRepository).deleteById(anyLong());
     }
 
     @Test
     @DisplayName("게시물 저장 성공 테스트")
     public void successSavePost(){
         //given
-        List<ImageDto> imageDtoList = new ArrayList<>();
-        imageDtoList.add(imageDto);
+        List<Image> imageList = new ArrayList<>();
+        imageList.add(image);
         List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
         imageRequestDtoList.add(imageRequestDto);
+        List<ImageDto> imageDtoList = imageList.stream()
+                        .map(image1 -> {
+                            return ImageDto.builder()
+                                    .imageId(image1.getId())
+                                    .postId(image1.getPost().getId())
+                                    .originalName(image1.getOriginalName())
+                                    .filePath(image1.getFilePath())
+                                    .fileSize(image1.getFileSize())
+                                    .build();
+                        }).toList();
 
-        when(productJdbcRepository.save(any())).thenReturn(productDto.getProductId());
-        when(postJdbcRepository.save(any())).thenReturn(postDto.getPostId());
-
+        when(productJpaRepository.save(any())).thenReturn(product);
+        when(postJpaRepository.save(any())).thenReturn(post);
         when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageDtoList);
-        doNothing().when(imageJdbcRepository).saveAll(anyList(), anyLong());
-
+        when(imageJpaRepository.saveAll(imageList)).thenReturn(imageList);
 
         //when
         postService.save(imageRequestDtoList, postRequestDto, memberDto);
 
         //then
-        assertThat(productJdbcRepository.save(productDto)).isNotNull();
-        assertThat(productJdbcRepository.save(productDto)).isEqualTo(productDto.getProductId());
-        assertThat(postJdbcRepository.save(postDto)).isNotNull();
-        assertThat(postJdbcRepository.save(postDto)).isEqualTo(postDto.getPostId());
-        assertThat(imageFileService.parseImageFiles(imageRequestDtoList, postDto.getPostId())).isNotNull();
-        assertThat(imageFileService.parseImageFiles(imageRequestDtoList, postDto.getPostId())).isEqualTo(imageDtoList);
+        assertThat(productJpaRepository.save(product)).isNotNull();
+        assertThat(productJpaRepository.save(product)).isEqualTo(product);
+        assertThat(postJpaRepository.save(post)).isNotNull();
+        assertThat(postJpaRepository.save(post)).isEqualTo(post);
+        assertThat(imageFileService.parseImageFiles(imageRequestDtoList, post.getId())).isNotNull();
+        assertThat(imageFileService.parseImageFiles(imageRequestDtoList, post.getId())).isEqualTo(imageDtoList);
 
-        verify(imageJdbcRepository).saveAll(anyList(), anyLong());
+        verify(imageJpaRepository).saveAll(anyList());
     }
+
 
     @Test
     @DisplayName("게시물 수정 성공 테스트")
     public void successUpdatePost(){
         //given
-        doNothing().when(postJdbcRepository).update(any());
-        doNothing().when(productJdbcRepository).update(any(), any());
-        when(imageJdbcRepository.findOneByPostId(any())).thenReturn(imageDto);
-        doNothing().when(imageFileService).deleteDirectoryAll(anyString());
 
-        List<ImageDto> imageDtoList = new ArrayList<>();
-        imageDtoList.add(imageDto);
-        when(imageFileService.parseImageFiles(anyList(), any())).thenReturn(imageDtoList);
+        Post mockPost = mock(Post.class);
+        Product mockProduct = mock(Product.class);
 
-        doNothing().when(imageJdbcRepository).deleteByPostId(any());
-        doNothing().when(imageJdbcRepository).saveAll(anyList(), any());
+        when(productJpaRepository.findById(anyLong())).thenReturn(Optional.of(mockProduct));
+        when(mockPost.getProduct()).thenReturn(mockProduct);
+        when(imageJpaRepository.findByCreatedAtByPostId(anyLong())).thenReturn(Optional.of(image));
+        //doNothing().when(imageFileService).deleteDirectoryAll(anyString());
 
-        //when
+        List<Image> imageList = new ArrayList<>();
+        imageList.add(image);
+        List<ImageDto> imageDtoList = imageList.stream()
+                        .map(image1 -> {
+                            return ImageDto.builder()
+                                    .imageId(image1.getId())
+                                    .postId(image1.getPost().getId())
+                                    .originalName(image1.getOriginalName())
+                                    .filePath(image1.getFilePath())
+                                    .fileSize(image1.getFileSize())
+                                    .build();
+                        }).toList();
+        when(imageFileService.parseImageFiles(anyList(), anyLong())).thenReturn(imageDtoList);
+
+        doNothing().when(imageJpaRepository).deleteAllByPostId(anyLong());
+        when(imageJpaRepository.saveAll(anyList())).thenReturn(imageList);
+
         PostUpdateRequestDto postUpdateRequestDto = PostUpdateRequestDto.builder()
                 .postTitle("updateTitle")
                 .postContent("updateContent")
                 .productPrice("50000")
                 .build();
-
         List<ImageRequestDto> imageRequestDtoList = new ArrayList<>();
         imageRequestDtoList.add(imageRequestDto);
-        postService.update(postDto, postUpdateRequestDto, imageRequestDtoList );
 
-        verify(postJdbcRepository).update(any());
-        verify(productJdbcRepository).update(any(), any());
+        //when
+        postService.update(mockPost, postUpdateRequestDto, imageRequestDtoList);
 
-        assertThat(imageJdbcRepository.findOneByPostId(any())).isNotNull();
-        assertThat(imageJdbcRepository.findOneByPostId(any())).isEqualTo(imageDto);
+        //then
+        verify(mockPost, times(1)).update(postUpdateRequestDto.getPostContent(), postUpdateRequestDto.getPostTitle());
+        verify(mockProduct, times(1)).update(postUpdateRequestDto.getProductPrice());
+        assertThat(imageJpaRepository.findByCreatedAtByPostId(anyLong())).isNotNull();
+        assertThat(imageJpaRepository.findByCreatedAtByPostId(anyLong())).isEqualTo(Optional.of(image));
+        //verify(imageFileService).deleteDirectoryAll(anyString());
+        assertThat(imageFileService.parseImageFiles(anyList(),anyLong())).isNotNull();
+        assertThat(imageFileService.parseImageFiles(anyList(),anyLong())).isEqualTo(imageDtoList);
 
-        verify(imageFileService).deleteDirectoryAll(anyString());
-
-        assertThat(imageFileService.parseImageFiles(anyList(),any())).isNotNull();
-        assertThat(imageFileService.parseImageFiles(anyList(),any())).isEqualTo(imageDtoList);
-
-        verify(imageJdbcRepository).deleteByPostId(any());
-        verify(imageJdbcRepository).saveAll(anyList(), any());
-
+        verify(imageJpaRepository).deleteAllByPostId(anyLong());
+        assertThat(imageJpaRepository.saveAll(anyList())).isEqualTo(imageList);
 
     }
-
-
 
 
 }
