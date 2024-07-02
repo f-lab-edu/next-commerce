@@ -19,19 +19,19 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IMAGE_ID")
+    @Column(name = "image_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     private String originalName;
 
-    @Column(name = "PATH")
+    @Column(name = "path")
     private String filePath;
 
-    @Column(name = "SIZE")
+    @Column(name = "size")
     private Long fileSize;
 
     @CreatedDate
