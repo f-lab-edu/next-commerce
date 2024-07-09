@@ -39,3 +39,5 @@ Naver Cloud Platform, Nginx
 
 
 ### ✔️ERD
+<div align="center"><img src ="https://woohyeonseo.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F6243c5a9-dd96-4b1d-8f13-c45b3a56f40d%2F13642900-3a87-4ea5-98ef-9f4cd24772ed%2FUntitled.png?table=block&id=9545ec21-9235-4542-b41e-71aa21707d54&spaceId=6243c5a9-dd96-4b1d-8f13-c45b3a56f40d&width=1500&userId=&cache=v2" width="70%"></div>
+
