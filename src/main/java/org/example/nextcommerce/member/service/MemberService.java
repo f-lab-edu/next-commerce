@@ -1,7 +1,6 @@
 package org.example.nextcommerce.member.service;
 
-import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.entity.Member;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 
 public interface MemberService<T> {
     public void create(T t);

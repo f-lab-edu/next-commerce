@@ -1,9 +1,8 @@
 package org.example.nextcommerce.member.service;
 
 import org.example.nextcommerce.common.exception.BadRequestException;
-import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.entity.Member;
-import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
+import org.example.nextcommerce.member.domain.entity.Member;
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

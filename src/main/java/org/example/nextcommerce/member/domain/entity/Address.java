@@ -1,4 +1,4 @@
-package org.example.nextcommerce.member.entity;
+package org.example.nextcommerce.member.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

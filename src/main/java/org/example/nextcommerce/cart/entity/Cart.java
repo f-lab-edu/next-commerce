@@ -7,8 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.nextcommerce.image.entity.Image;
-import org.example.nextcommerce.member.entity.Member;
-import org.example.nextcommerce.post.entity.Post;
+import org.example.nextcommerce.member.domain.entity.Member;
 import org.example.nextcommerce.post.entity.Product;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

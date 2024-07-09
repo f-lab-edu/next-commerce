@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.example.nextcommerce.common.resolver.LoginMemberArgumentResolver;
 
-import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.example.nextcommerce.post.dto.PostRequestDto;

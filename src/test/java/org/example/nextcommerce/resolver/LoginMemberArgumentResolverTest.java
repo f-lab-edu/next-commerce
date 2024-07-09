@@ -2,7 +2,6 @@ package org.example.nextcommerce.resolver;
 
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.resolver.LoginMemberArgumentResolver;
-import org.example.nextcommerce.member.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;

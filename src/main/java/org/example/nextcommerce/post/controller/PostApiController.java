@@ -6,7 +6,7 @@ import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
 import org.example.nextcommerce.common.exception.FileHandleException;
 
-import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 import org.example.nextcommerce.post.dto.ImageRequestDto;
 import org.example.nextcommerce.post.dto.PostRequestDto;
 import org.example.nextcommerce.post.dto.PostUpdateRequestDto;
