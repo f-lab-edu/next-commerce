@@ -2,7 +2,7 @@ package org.example.nextcommerce.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 import org.example.nextcommerce.common.exception.BadRequestException;
 import org.example.nextcommerce.common.exception.MemberNotFoundException;
 import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;

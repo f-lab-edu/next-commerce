@@ -1,12 +1,9 @@
 package org.example.nextcommerce.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
-import org.example.nextcommerce.member.service.MemberJdbcService;
 import org.example.nextcommerce.member.service.MemberJpaService;
-import org.example.nextcommerce.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

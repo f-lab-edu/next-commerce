@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.nextcommerce.cart.dto.CartDto;
 import org.example.nextcommerce.cart.dto.CartRequestDto;
-import org.example.nextcommerce.cart.dto.CartResponseDto;
 import org.example.nextcommerce.cart.entity.Cart;
 import org.example.nextcommerce.cart.service.CartService;
 import org.example.nextcommerce.common.annotation.LoginMember;
 import org.example.nextcommerce.common.annotation.LoginRequired;
-import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

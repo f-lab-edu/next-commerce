@@ -1,7 +1,7 @@
-package org.example.nextcommerce.member.dto;
+package org.example.nextcommerce.member.domain.dto;
 
 import lombok.*;
-import org.example.nextcommerce.member.entity.Member;
+import org.example.nextcommerce.member.domain.entity.Member;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.regex.Pattern;

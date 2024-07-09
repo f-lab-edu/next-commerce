@@ -4,37 +4,35 @@ import lombok.RequiredArgsConstructor;
 import org.example.nextcommerce.common.exception.BadRequestException;
 import org.example.nextcommerce.common.exception.MemberNotFoundException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
-import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.entity.Member;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
+import org.example.nextcommerce.member.domain.entity.Member;
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
-public class MemberJpaService implements MemberService<Member>{
+public class MemberJpaService{
 
     private final MemberJpaRepository memberJpaRepository;
+   // private MemberMapper memberMapper;
 
-    @Override
-    public void create(Member member) {
-        memberJpaRepository.save(member);
+    public void create(MemberDto memberDto) {
+        memberJpaRepository.save(memberDto.toEntity());
     }
 
-    @Override
     public void checkDuplicatedEmail(String email) {
         if(memberJpaRepository.findMemberByEmail(email).isPresent()){  //null이 아닌 경우
             throw new BadRequestException(ErrorCode.MemberDuplicatedEmail);
         }
     }
 
-    @Override
     public Long checkValidMember(Member inputMember) {
         Member member = memberJpaRepository.findMemberByEmail(inputMember.getEmail()).orElseThrow(() -> new BadRequestException(ErrorCode.MemberNotFound));
        return member.getId();
     }
 
-    @Override
+
     public boolean isValidMemberDto(MemberDto memberDto){
         if(!memberDto.isValidEmail()){
             throw new BadRequestException(ErrorCode.MemberEmailValidationFailed);
@@ -45,12 +43,12 @@ public class MemberJpaService implements MemberService<Member>{
         return true;
     }
 
-    @Override
+
     public void deleteMember(Long memberId) {
         memberJpaRepository.deleteById(memberId);
     }
 
-    @Override
+
     public MemberDto checkLoginMember(Long memberId){
         Member member = memberJpaRepository.findById(memberId).orElseThrow(()-> new MemberNotFoundException(ErrorCode.MemberNotFound));
         return MemberDto.builder()

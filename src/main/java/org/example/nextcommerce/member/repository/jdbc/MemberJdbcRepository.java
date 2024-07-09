@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.nextcommerce.common.exception.DatabaseException;
 import org.example.nextcommerce.common.exception.MemberNotFoundException;
 import org.example.nextcommerce.common.utils.errormessage.ErrorCode;
-import org.example.nextcommerce.member.dto.MemberDto;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

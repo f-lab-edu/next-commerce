@@ -1,22 +1,15 @@
 package org.example.nextcommerce.cart.service;
 
-import org.example.nextcommerce.cart.dto.CartDto;
 import org.example.nextcommerce.cart.dto.CartRequestDto;
 import org.example.nextcommerce.cart.entity.Cart;
-import org.example.nextcommerce.cart.repository.jdbc.CartJdbcRepository;
 
 import org.example.nextcommerce.cart.repository.jpa.CartJpaRepository;
-import org.example.nextcommerce.image.dto.ImageDto;
 import org.example.nextcommerce.image.entity.Image;
 import org.example.nextcommerce.image.repository.jpa.ImageJpaRepository;
-import org.example.nextcommerce.member.entity.Member;
+import org.example.nextcommerce.member.domain.entity.Member;
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
-import org.example.nextcommerce.member.service.MemberJpaService;
-import org.example.nextcommerce.post.dto.PostDto;
-import org.example.nextcommerce.image.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.post.entity.Post;
 import org.example.nextcommerce.post.entity.Product;
-import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.image.service.ImageFileService;
 import org.example.nextcommerce.post.repository.jpa.ProductJpaRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,22 +2,14 @@ package org.example.nextcommerce.cart.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.nextcommerce.cart.dto.CartRequestDto;
-import org.example.nextcommerce.cart.entity.Cart;
-import org.example.nextcommerce.cart.repository.jdbc.CartJdbcRepository;
 import org.example.nextcommerce.cart.repository.jpa.CartJpaRepository;
 import org.example.nextcommerce.cart.service.CartService;
 import org.example.nextcommerce.common.resolver.LoginMemberArgumentResolver;
 import org.example.nextcommerce.image.repository.jpa.ImageJpaRepository;
-import org.example.nextcommerce.member.dto.MemberDto;
-import org.example.nextcommerce.member.repository.jdbc.MemberJdbcRepository;
+import org.example.nextcommerce.member.domain.dto.MemberDto;
 import org.example.nextcommerce.member.repository.jpa.MemberJpaRepository;
-import org.example.nextcommerce.member.service.MemberJdbcService;
-import org.example.nextcommerce.image.repository.jdbc.ImageJdbcRepository;
 import org.example.nextcommerce.member.service.MemberJpaService;
-import org.example.nextcommerce.post.controller.PostApiControllerTest;
-import org.example.nextcommerce.post.repository.jdbc.PostJdbcRepository;
 import org.example.nextcommerce.image.service.ImageFileService;
-import org.example.nextcommerce.post.repository.jpa.PostJpaRepository;
 import org.example.nextcommerce.post.repository.jpa.ProductJpaRepository;
 import org.example.nextcommerce.post.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +30,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
