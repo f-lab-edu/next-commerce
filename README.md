@@ -36,6 +36,9 @@ SpringBoot, IntelliJ, Gradle, Java17, JPA, MySQL8
 Naver Cloud Platform, Nginx
 
 ### ✔️프로젝트 전체 구성도
+<div align="center"><img src="https://woohyeonseo.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F6243c5a9-dd96-4b1d-8f13-c45b3a56f40d%2F561f7e1a-f9c1-48ba-a6a2-16268585e0f1%2Fstrcuture1.jpg?table=block&id=dd56b381-b749-4b61-8eb9-1dad3f47a1ad&spaceId=6243c5a9-dd96-4b1d-8f13-c45b3a56f40d&width=2000&userId=&cache=v2" width="70%"> </imge></div>
+
+<div align="center"><img src="https://woohyeonseo.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F6243c5a9-dd96-4b1d-8f13-c45b3a56f40d%2F3d6983b1-dc22-4551-923a-5115bb420428%2Fstrcuture_kubernetes.jpg?table=block&id=a00b4d6c-4ac4-473a-bf72-e5d160976556&spaceId=6243c5a9-dd96-4b1d-8f13-c45b3a56f40d&width=1640&userId=&cache=v2" width="70%"> </imge></div>
 
 
 ### ✔️ERD
